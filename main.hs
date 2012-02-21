@@ -11,8 +11,8 @@ import Graphics.Gloss
 import Graphics.Gloss.Data.Picture 
 import Maybe ( isNothing, mapMaybe )
 import Monad ( liftM )
-import NumericPrelude
-import Prelude ( Float )
+-- import NumericPrelude
+-- import Prelude ( Float )
 import System.Random
 
 gridSize = 20
@@ -20,6 +20,11 @@ gridSpacing = 10
 circleRadius = 4
 numVertices = 20
 numEdges = 20
+
+rows = 4
+columns = 5
+
+
 screen = InWindow "Graph display by Spencer Gordon"  (2 * fst graphDimensions, snd graphDimensions) (100, 100) 
 
 -- screen = FullScreen (2 * fst graphDimensions, snd graphDimensions)
@@ -30,10 +35,15 @@ halfGraphDimensions :: (Float, Float)
 halfGraphDimensions = ((fI $ fst graphDimensions) / 2, (fI $ snd graphDimensions) / 2)
 
 
+
+
 getRandomVertex :: IO Vertex
 getRandomVertex = do x <- getStdRandom (randomR (0 - gridSize, gridSize))
                      y <- getStdRandom (randomR (0 - gridSize, gridSize))
                      return $ Vertex Nothing (gridSpacing * x, gridSpacing * y)
+
+generateVertices r c = [Vertex Nothing (gridSpacing * x - (fI ((columns * gridSpacing) / 2)), gridSpacing * y - (fI ((rows * gridSpacing) / 2))) | x <- [1..columns], y <- [1..rows] ]
+
 
 getRandomEdge :: IO Edge
 getRandomEdge = do a <- getStdRandom (randomR (1, numVertices - 1))
