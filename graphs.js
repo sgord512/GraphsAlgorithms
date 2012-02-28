@@ -1,171 +1,146 @@
-$(document).ready(function() {
+define(['underscore-1.3.1'], function(underscore) {
 
-    function Edge(start, end) {
-        if(start < end) {
-            this.start = start;
-            this.end = end;
+    var _ = this._;
+
+    var Graph = {}
+    Graph.initialize = function(config) {
+        var g = {}
+        var c = config || {}
+        g.num_points = c.num_points || 20;
+        g.num_edges = c.num_edges || (g.num_points * 2) ;
+        g.h = c.y_max || 500;
+        g.w = c.x_max || 500;
+
+        g.Edge = function(start, end) {
+            if(start < end) {
+                this.start = start;
+                this.end = end;
+            }
+            else if(start > end) {
+                this.start = end;
+                this.end = start;
+            }
+            else if(start == end) {
+                console.log("Self-loop created!");
+                this.self_loop = true;
+            }
+
+            this.index = g.Edge.next_index();
+            this.inMST = false;
         }
-        else if(start > end) {
-            this.start = end;
-            this.end = start;
+
+        g.Edge.prototype.start_point = function() { return g.points[this.start] };
+        g.Edge.prototype.end_point = function() { return g.points[this.end] };
+        g.Edge.prototype.weight = function() { return Math.sqrt(Math.pow(this.start_point().x - this.end_point().x,2) + Math.pow(this.start_point().y - this.end_point().y,2)); };
+        g.Edge.prototype.addToMST = function() { this.inMST = true; g.edges_in_tree.unshift(this); console.log(this + " added to MST!"); };
+        g.Edge.prototype.id = function() { return this.start * g.num_points + this.end; };
+        g.Edge.prototype.toString = function() { return "index: " + this.index + "\n" + this.start + " to " + this.end + "\ninMST: " + this.inMST; };
+
+        g.Edge.next_index = function() { 
+            if(_.isUndefined(g.Edge._next_index)) {
+                g.Edge._next_index = 1;
+                return 0;
+            } else {
+                var index = g.Edge._next_index;
+                g.Edge._next_index += 1;
+                return index;
+            }
+        };
+
+        g.Vertex = function(x, y) {
+            this.x = x;
+            this.y = y;
+            this.index = g.Vertex.next_index();
+            this.inMST = false;
         }
-        else if(start == end) {
-            console.log("Self-loop created!");
-            this.self_loop = true;
+
+        g.Vertex.prototype.addToMST = function() { this.inMST = true; g.vertices_in_tree.unshift(this); console.log(this + " added to MST!"); };
+        g.Vertex.prototype.toString = function() { return "index: " + this.index + "\ninMST: " + this.inMST; };
+
+        g.Vertex.next_index = function() { 
+            if(_.isUndefined(g.Vertex._next_index)) {
+                g.Vertex._next_index = 1;
+                return 0;
+            } else {
+                var index = g.Vertex._next_index;
+                g.Vertex._next_index += 1;
+                return index;
+            }
+        };
+
+        g.valid_edge = function(e) {
+            var contains_start = g.incident_to_start(e);
+            var contains_end = g.incident_to_end(e);
+            return (contains_start && !contains_end) || (!contains_start && contains_end);
         }
 
-        this.index = Edge.next_index();
-        this.inMST = false;
-    }
-
-    Edge.prototype.start_point = function() { return points[this.start] };
-    Edge.prototype.end_point = function() { return points[this.end] };
-    Edge.prototype.weight = function() { return Math.sqrt(Math.pow(this.start_point.x - this.end_point.x,2) + Math.pow(this.start_point.y - this.end_point.y,2)); };
-    Edge.prototype.addToMST = function() { console.log(this + " added to MST!"); this.inMST = true; };
-    Edge.prototype.id = function() { return this.start * num_points + this.end; };
-    Edge.prototype.toString = function() { return "index: " + this.index + ", " + this.start + " to " + this.end; };
-
-    Edge.next_index = function() { 
-        if(_.isUndefined(Edge._next_index)) {
-            Edge._next_index = 1;
-            return 0;
-        } else {
-            var index = Edge._next_index;
-            Edge._next_index += 1;
-            return index;
+        g.incident_to_start = function(e) {
+            return _.include(g.vertices_in_tree, e.start_point());
         }
-    };
 
-    function Vertex(x, y) {
-        this.x = x;
-        this.y = y;
-        this.index = Vertex.next_index();
-        this.inMST = false;
-    }
-
-    Vertex.next_index = function() { 
-        if(_.isUndefined(Vertex._next_index)) {
-            Vertex._next_index = 1;
-            return 0;
-        } else {
-            var index = Vertex._next_index;
-            Vertex._next_index += 1;
-            return index;
+        g.incident_to_end = function(e) {
+            return _.include(g.vertices_in_tree, e.end_point());
         }
-    };
 
-    var h = 7/8 * screen.height;
-    var w = screen.width / 2;
-    var num_points = 20;
-    var num_edges = num_points * 2;
-    var color = d3.rgb(0, 0, 0);
-    var selected_color = d3.rgb(0, 255, 0);
 
-    var canvas = d3.select("#sketchpad")
-        .append("svg:svg")
-        .attr("height", h)
-        .attr("width", w);
+        g.find_next_edge = function() {
+            var next_edge, added_point;
+            var current_index = 0;
+            var edge_found = false;
+            if(g.vertices_in_tree.length == g.num_points) return false ;
+            while(current_index < g.sorted_edge_list.length)
+            {
+                next_edge = g.sorted_edge_list[current_index];
+                if (g.valid_edge(next_edge)) {
+                    next_edge.addToMST();
+                    g.sorted_edge_list[current_index] = undefined;
+                    g.sorted_edge_list = _.compact(g.sorted_edge_list);
+                    edge_found = true;
+                    break;
+                }
+                else { 
+                    current_index += 1;
+                }
+            }
 
-    var points = [];
-    _(num_points).times(function() {
-        points.push(new Vertex(Math.random() * w, Math.random() * h));
-    });
+            if(!edge_found) { 
+                console.log("out of luck"); return false;
+            }
+            if(g.incident_to_start(next_edge)) {
+                added_point = next_edge.end_point();
+            } else if(g.incident_to_end(next_edge)) {
+                added_point = next_edge.start_point();
+            }
+            else console.log("This shouldn't happen");
 
-    var edge_list = []
-    _(num_edges).times(function() { 
-        edge_list.push(new Edge(Math.floor(Math.random() * num_points), Math.floor(Math.random() * num_points)))
-    });
+            added_point.addToMST();
 
-    var sorted_edge_list = _.reject(edge_list, function(e) { return e.self_loop });
-    sorted_edge_list = _.sortBy(sorted_edge_list, function(e) { return e.id() });
-    sorted_edge_list = _.uniq(sorted_edge_list, true, function(e) { return e.id() });
-    sorted_edge_list = _.sortBy(sorted_edge_list, function(e) { return e.weight() });
+            return true;
+        }
 
-    var edges_in_tree = []
+        g.edges_in_tree = [];
+        g.vertices_in_tree = [];
 
-    var vertices_in_tree = [points[Math.floor(Math.random() * num_points)]];
-    _.first(vertices_in_tree)["inMST"] = true;
-
-    function redraw() {
-        canvas.selectAll("line")
-            .data(edge_list)
-            .filter(function(d) { return d.inMST; })
-//            .transition()
-            .style("stroke-width", 2)
-            .style("stroke", selected_color);
-
-        canvas.selectAll("circle")
-            .data(points)
-            .filter(function(d) { return d.inMST; })
-//            .transition()
-            .style("fill", selected_color);
-    }
-    
-    function valid_edge(e) {
-        var contains_start = _.include(vertices_in_tree, e.start_point());
-        var contains_end = _.include(vertices_in_tree, e.end_point());
-        //console.log("Start: " + e.start + " End: " + e.end);
-        //console.log("Contains start: " + contains_start + ", contains end: " + contains_end);
-        return (contains_start && !contains_end) || (!contains_start && contains_end);
         
+        g.points = [];
+        _(g.num_points).times(function() {
+            g.points.push(new g.Vertex(Math.random() * g.w, Math.random() * g.h));
+        });
+        
+        g.edge_list = []
+        _(g.num_edges).times(function() { 
+            g.edge_list.push(new g.Edge(Math.floor(Math.random() * g.num_points), Math.floor(Math.random() * g.num_points)))
+        });
+
+        g.edge_list = _.reject(g.edge_list, function(e) { return e.self_loop });
+        g.edge_list = _.sortBy(g.edge_list, function(e) { return e.id() });
+        g.edge_list = _.uniq(g.edge_list, true, function(e) { return e.id() });
+        g.sorted_edge_list = _.sortBy(g.edge_list, function(e) { return e.weight() });
+
+        g.pickStartVertex = function() {
+            g.points[Math.floor(Math.random() * g.num_points)].addToMST();
+        }
+        return g;
     }
-
-    function find_next_edge() {
-        var next_edge, added_point;
-        var current_index = 0;
-        if(vertices_in_tree.length == num_points) return;
-        while(current_index < sorted_edge_list.length)
-        {
-            next_edge = sorted_edge_list[current_index];
-            if (valid_edge(next_edge)) {
-                next_edge.addToMST();
-                edges_in_tree.unshift(next_edge);
-                break;
-            }
-            else { 
-                current_index += 1;
-            }
-        }
-
-        if(current_index == sorted_edge_list.length) { 
-            console.log("out of luck"); return;
-        } else {
-            sorted_edge_list = sorted_edge_list.slice(0, current_index).concat(sorted_edge_list.slice(current_index + 1));
-        }
-                
-        if(_.include(vertices_in_tree, next_edge.start_point())) {
-            added_point = next_edge.end_point();
-        } else {
-            added_point = next_edge.start_point();
-        }
-        vertices_in_tree.unshift(added_point);
-        added_point["inMST"] = true;
-    }
-     
-    canvas.selectAll("circle")
-        .data(points)
-        .enter()
-        .append("svg:circle")
-        .attr("cx", function(d) { return d.x })
-        .attr("cy", function(d) { return d.y })
-        .attr("r", 4)
-        .style("fill", function(d) { return color });
-
-    canvas.selectAll("line")
-        .data(sorted_edge_list)
-        .enter()
-        .append("svg:line")
-        .attr("x1", function(d) { return d.start_point().x; })
-        .attr("y1", function(d) { return d.start_point().y; })
-        .attr("x2", function(d) { return d.end_point().x; })
-        .attr("y2", function(d) { return d.end_point().y; })
-        .attr("id", function(d) { return d.toString();  })
-        .style("stroke", function(d) { return color });
-
-    setInterval(function() {
-        find_next_edge();
-        console.log(vertices_in_tree.length);
-        redraw(); }, 100);
-
+    return Graph;
 });
-

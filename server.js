@@ -1,10 +1,14 @@
-var static_server = require('node-static');
+var connect = require('connect')
+   ,http = require('http');
 
-var file =  new static_server.Server();
-
-require('http').createServer(function (request, response) {
-    request.addListener('end', function() {
-        file.serve(request,response);
+var app = connect()
+    .use(connect.static(__dirname))
+    .use(connect.logger('dev'))
+    .use(function(req, res) {
+        res.end("No content here. Sorry.\n");
     });
-}).listen(8080);
+
+http.createServer(app).listen(8080);
+    
+
                        
