@@ -9,10 +9,10 @@ define(['jquery-1.7.1', 'graphs', 'd3/d3'], function($, Graph, d3) {
         var scaling_factor = (1 - separator_factor) / 2;
         var h = 7/8 * screen.height;
         var w = 15/16 * screen.width;
-        var num_vertices = 20;
+        var num_vertices = 200;
         var edges_per_vertex = 4;
         var default_color = d3.hsl(180, .10, .0);
-        var selected_color = d3.rgb(0, 255, 0);
+        var selected_color = d3.rgb(0, 0, 255);
         var selected_color2 = d3.rgb(255, 0, 0);
 
         var canvas = d3.select("#sketchpad")
@@ -122,7 +122,7 @@ define(['jquery-1.7.1', 'graphs', 'd3/d3'], function($, Graph, d3) {
         setInterval(function() {
             if(graph_kruskal.find_next_edge()) redraw(graph_kruskal);
             if(graph_prim.find_next_edge()) redraw(graph_prim);
-        }, 1000);
+        }, 100);
 
     });
 
