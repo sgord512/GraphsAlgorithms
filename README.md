@@ -13,3 +13,13 @@ employed to generate close-to-planar graphs. Also, maybe I can have
 some stock graph connected-components that I can randomly
 arrange. Some system where I replace each vertex with an entire graph,
 in some fractal way. Then again, I'm probably way overthinking this.
+
+Thoughts on Organization:
+
+Basically, I want each edge/vertex to refer back to its graph, which I
+currently do by having the Edge prototype have an attribute graph,
+which I assign early on. The problem is, then all edges necessarily
+have the same graph attribute, and if I want to have multiple graphs,
+then I don't know how to have some edges have one graph, and others
+have others.
+

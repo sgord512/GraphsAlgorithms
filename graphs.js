@@ -1,146 +1,113 @@
-define(['underscore-1.3.1'], function(underscore) {
+define(['underscore-1.3.1', 'edge', 'vertex', 'prim', 'kruskal'], function(underscore, Edge, Vertex, prim, kruskal) {
 
     var _ = this._;
 
-    var Graph = {}
+
+    var Graph = {};
+
+    Graph = function(config) {
+        var c = config || {};
+        this.num_vertices = c.num_vertices || 20;
+        this.edges_per_vertex = c.edges_per_vertex || (this.num_vertices * 2) ;
+        this.h = c.y_max || 500;
+        this.w = c.x_max || 500;
+
+        this.edges_in_tree = [];
+        this.vertices_in_tree = [];
+        this.Edge = Edge;
+        this.Vertex = Vertex;
+
+    }
+
+    Graph.prototype.algorithms = { 'prim': prim, 'kruskal': kruskal };
+
+    Graph.prototype.random_coords = function(prev) {
+        return { 'x': (Math.random() * this.w), 'y': (Math.random() * this.h) };
+    }
+
+    Graph.prototype.descending_coords = function(prev) { 
+        var x = prev.x + (this.w / this.num_vertices) * Math.random();
+        var y = prev.y + (this.h / this.num_vertices) * Math.random();
+        return { 'x': x, 'y': y };
+    }
+
+    Graph.prototype.edge_id = function(e) { 
+        return e.start * this.num_vertices + e.end; 
+    }
+
+    Graph.prototype.addToMST = function(o) {
+        if(o instanceof Edge) {
+            this.edges_in_tree.unshift(o);
+            o.inMST = true;
+        }
+        else if(o instanceof Vertex) {
+            this.vertices_in_tree.unshift(o);
+            o.inMST = true;
+        }
+        else console.log("Tried to add something that wasn't an edge or vertex!");
+    }
+        
+    
+    Graph.prototype.generateVertices = function(generator) { 
+        var self = this;
+        var vertices = [];
+        var gen = _.bind(generator, self);
+        var result = { 'x': 0, 'y': 0 };
+        _(this.num_vertices).times(function() {
+            result = gen(result);
+            vertices.push(new Vertex(result.x, result.y));
+        });
+        return vertices;
+    }
+
+    Graph.prototype.generateEdges = function() {
+        var self = this;
+        var edge_list = [];
+        _.each(this.vertices, function(pt) { 
+            _(self.edges_per_vertex).times(function() {
+                edge_list.push(new Edge(pt.index, Math.floor(Math.random() * self.num_vertices), self));
+            });
+        });
+        
+        edge_list = _.reject(edge_list, function(e) { return e.self_loop });
+        edge_list = _.sortBy(edge_list, function(e) { return self.edge_id(e) });
+        edge_list = _.uniq(edge_list, true, function(e) { return self.edge_id(e) });
+        edge_list = _.sortBy(edge_list, function(e) { return e.index });
+        return edge_list;
+    }
+
+    Graph.prototype.find_mst = function(settings) {
+        var algorithm_name = settings.algorithm || 'prim';
+        var algorithm = this.algorithms[algorithm_name].initialize(this);
+        this.algorithm = algorithm;
+
+        this.find_next_edge = algorithm.find_next_edge;
+    }
+    
     Graph.initialize = function(config) {
-        var g = {}
-        var c = config || {}
-        g.num_points = c.num_points || 20;
-        g.num_edges = c.num_edges || (g.num_points * 2) ;
-        g.h = c.y_max || 500;
-        g.w = c.x_max || 500;
+        var g = new Graph(config);
 
-        g.Edge = function(start, end) {
-            if(start < end) {
-                this.start = start;
-                this.end = end;
-            }
-            else if(start > end) {
-                this.start = end;
-                this.end = start;
-            }
-            else if(start == end) {
-                console.log("Self-loop created!");
-                this.self_loop = true;
-            }
+        g.vertices = g.generateVertices(g.random_coords);
+        g.edge_list = g.generateEdges();
 
-            this.index = g.Edge.next_index();
-            this.inMST = false;
-        }
+        g.sorted_edge_list = _.sortBy(g.edge_list, function(e) { return e.weight(); });
+   
+        return g;
 
-        g.Edge.prototype.start_point = function() { return g.points[this.start] };
-        g.Edge.prototype.end_point = function() { return g.points[this.end] };
-        g.Edge.prototype.weight = function() { return Math.sqrt(Math.pow(this.start_point().x - this.end_point().x,2) + Math.pow(this.start_point().y - this.end_point().y,2)); };
-        g.Edge.prototype.addToMST = function() { this.inMST = true; g.edges_in_tree.unshift(this); console.log(this + " added to MST!"); };
-        g.Edge.prototype.id = function() { return this.start * g.num_points + this.end; };
-        g.Edge.prototype.toString = function() { return "index: " + this.index + "\n" + this.start + " to " + this.end + "\ninMST: " + this.inMST; };
+    }
 
-        g.Edge.next_index = function() { 
-            if(_.isUndefined(g.Edge._next_index)) {
-                g.Edge._next_index = 1;
-                return 0;
-            } else {
-                var index = g.Edge._next_index;
-                g.Edge._next_index += 1;
-                return index;
-            }
-        };
-
-        g.Vertex = function(x, y) {
-            this.x = x;
-            this.y = y;
-            this.index = g.Vertex.next_index();
-            this.inMST = false;
-        }
-
-        g.Vertex.prototype.addToMST = function() { this.inMST = true; g.vertices_in_tree.unshift(this); console.log(this + " added to MST!"); };
-        g.Vertex.prototype.toString = function() { return "index: " + this.index + "\ninMST: " + this.inMST; };
-
-        g.Vertex.next_index = function() { 
-            if(_.isUndefined(g.Vertex._next_index)) {
-                g.Vertex._next_index = 1;
-                return 0;
-            } else {
-                var index = g.Vertex._next_index;
-                g.Vertex._next_index += 1;
-                return index;
-            }
-        };
-
-        g.valid_edge = function(e) {
-            var contains_start = g.incident_to_start(e);
-            var contains_end = g.incident_to_end(e);
-            return (contains_start && !contains_end) || (!contains_start && contains_end);
-        }
-
-        g.incident_to_start = function(e) {
-            return _.include(g.vertices_in_tree, e.start_point());
-        }
-
-        g.incident_to_end = function(e) {
-            return _.include(g.vertices_in_tree, e.end_point());
-        }
-
-
-        g.find_next_edge = function() {
-            var next_edge, added_point;
-            var current_index = 0;
-            var edge_found = false;
-            if(g.vertices_in_tree.length == g.num_points) return false ;
-            while(current_index < g.sorted_edge_list.length)
-            {
-                next_edge = g.sorted_edge_list[current_index];
-                if (g.valid_edge(next_edge)) {
-                    next_edge.addToMST();
-                    g.sorted_edge_list[current_index] = undefined;
-                    g.sorted_edge_list = _.compact(g.sorted_edge_list);
-                    edge_found = true;
-                    break;
-                }
-                else { 
-                    current_index += 1;
-                }
-            }
-
-            if(!edge_found) { 
-                console.log("out of luck"); return false;
-            }
-            if(g.incident_to_start(next_edge)) {
-                added_point = next_edge.end_point();
-            } else if(g.incident_to_end(next_edge)) {
-                added_point = next_edge.start_point();
-            }
-            else console.log("This shouldn't happen");
-
-            added_point.addToMST();
-
-            return true;
-        }
-
-        g.edges_in_tree = [];
-        g.vertices_in_tree = [];
-
-        
-        g.points = [];
-        _(g.num_points).times(function() {
-            g.points.push(new g.Vertex(Math.random() * g.w, Math.random() * g.h));
-        });
-        
-        g.edge_list = []
-        _(g.num_edges).times(function() { 
-            g.edge_list.push(new g.Edge(Math.floor(Math.random() * g.num_points), Math.floor(Math.random() * g.num_points)))
-        });
-
-        g.edge_list = _.reject(g.edge_list, function(e) { return e.self_loop });
-        g.edge_list = _.sortBy(g.edge_list, function(e) { return e.id() });
-        g.edge_list = _.uniq(g.edge_list, true, function(e) { return e.id() });
-        g.sorted_edge_list = _.sortBy(g.edge_list, function(e) { return e.weight() });
-
-        g.pickStartVertex = function() {
-            g.points[Math.floor(Math.random() * g.num_points)].addToMST();
-        }
+    Graph.clone = function(graph) {
+        var g = new Graph({ 'num_vertices': graph.num_vertices
+                            , 'edges_per_vertex': graph.edges_per_vertex
+                            , 'x_max': graph.x_max
+                            , 'y_max': graph.y_max });
+        g.vertices = [];
+        _.each(graph.vertices, function(v) { g.vertices.push(Vertex.clone(v, g)); });
+        g.edge_list = [];
+        _.each(graph.edge_list, function(e) { g.edge_list.push(Edge.clone(e, g)); });
+        g.sorted_edge_list = _.sortBy(g.edge_list, function(e) { return e.weight(); });
         return g;
     }
     return Graph;
+
 });

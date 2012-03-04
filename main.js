@@ -1,1 +1,1 @@
-require(['d3/d3', 'graphs', 'algorithms'], function() { console.log("Everything loaded"); })
+require(['algorithms'], function() { console.log("Everything loaded"); })
