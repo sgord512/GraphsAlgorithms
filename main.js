@@ -1,1 +1,5 @@
-require(['algorithms'], function() { console.log("Everything loaded"); })
+require(['algorithms', 'huffman'], function(algorithms, huffman) { 
+    console.log("Everything loaded");
+//    algorithms();
+    huffman();
+});
