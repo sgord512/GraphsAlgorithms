@@ -1,4 +1,4 @@
-var port = process.env.port || 3000;
+var port = process.env.PORT || 3000;
 
 var connect = require('connect')
    ,http = require('http');
