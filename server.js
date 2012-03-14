@@ -1,3 +1,5 @@
+var port = 8080;
+
 var connect = require('connect')
    ,http = require('http');
 
@@ -8,7 +10,9 @@ var app = connect()
         res.end("No content here. Sorry.\n");
     });
 
-http.createServer(app).listen(8080);
+http.createServer(app).listen(port);
+
+console.log("listening on port " + port);
     
 
                        
