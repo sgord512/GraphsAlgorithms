@@ -11,6 +11,8 @@
   "engines": {
     "node": "~0.6.12"
   },
-  "dependencies": {},
+  "dependencies": {
+    "connect": "~2.0.2"
+  },
   "devDependencies": {}
 }
