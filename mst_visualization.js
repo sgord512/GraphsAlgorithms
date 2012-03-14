@@ -123,7 +123,7 @@ define(['jquery-1.7.1', 'graphs', 'd3/d3'], function($, Graph, d3) {
             
             setInterval(function() {
                 if(graph_kruskal.find_next_edge()) redraw(graph_kruskal);
-                if(graph_prim.find_next_edge()) redraw(graph_prim);
+                if(graph_prim.find_next_edge()) redraw(graph_prim);                
             }, 100);
             
 

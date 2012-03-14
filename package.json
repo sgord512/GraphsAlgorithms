@@ -1,0 +1,16 @@
+{
+  "author": "Spencer Gordon <sgord512@gmail.com>",
+  "name": "algorithms",
+  "description": "A collection of modules for the animation and execution of various algorithms",
+  "version": "0.1.0",
+  "homepage": "https://github.com/sgord512/GraphsAlgorithms",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sgord512/GraphsAlgorithms.git"
+  },
+  "engines": {
+    "node": "~0.6.12"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

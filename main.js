@@ -1,5 +1,5 @@
-require(['algorithms', 'huffman'], function(algorithms, huffman) { 
+require(['mst_visualization', 'huffman_visualization'], function(mst_visualization, huffman_visualization) { 
     console.log("Everything loaded");
-//    algorithms();
-    huffman();
+//    mst_visualization();
+    huffman_visualization();
 });

@@ -2,7 +2,6 @@ define(['underscore-1.3.1', 'edge', 'vertex', 'prim', 'kruskal'], function(under
 
     var _ = this._;
 
-
     var Graph = {};
 
     Graph = function(config) {
@@ -16,7 +15,6 @@ define(['underscore-1.3.1', 'edge', 'vertex', 'prim', 'kruskal'], function(under
         this.vertices_in_tree = [];
         this.Edge = Edge;
         this.Vertex = Vertex;
-
     }
 
     Graph.prototype.algorithms = { 'prim': prim, 'kruskal': kruskal };
@@ -47,7 +45,6 @@ define(['underscore-1.3.1', 'edge', 'vertex', 'prim', 'kruskal'], function(under
         else console.log("Tried to add something that wasn't an edge or vertex!");
     }
         
-    
     Graph.prototype.generateVertices = function(generator) { 
         var self = this;
         var vertices = [];
