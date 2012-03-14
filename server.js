@@ -1,4 +1,4 @@
-var port = 8080;
+var port = process.env.port || 3000;
 
 var connect = require('connect')
    ,http = require('http');
