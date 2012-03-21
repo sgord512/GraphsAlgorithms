@@ -7,6 +7,15 @@ Algorithms in Progress or Complete
 - Prim's Algorithm
 - Kruskal's Algorithm
 - Huffman Coding
+- Edit Distance
+- Karger's Min Cut
+- Longest Palincomplementary Sequence
+- k-th Selection (Randomized)
+- Hexagonal Tiling
+- Viterbi's Algorithm
+- Hadamard Matrices
+- Wood-Splitting (String-breaking algorithm, don't know the official name)
+
 
 TODO
 ----
@@ -31,4 +40,10 @@ times by default, and whenever conflicts occur, have the conflicting
 nodes duel it out.
 
 3. Ok, so I got Huffman coding working, but it ain't pretty. I would
-like to make that better.
+like to make that better. Ideas: 
+- do something with the balancing and wieghting of the trees.
+- have the connected chunk move together, to make its togetherness evident.
+
+4. I could try animating some data structures.
+
+

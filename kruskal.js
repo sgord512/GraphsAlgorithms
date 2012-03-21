@@ -1,11 +1,11 @@
-define(['underscore-1.3.1'], function(underscore) {
+define(['underscore-1.3.1', 'graphs'], function(underscore, Graph) {
     
 
     var _ = this._;
-
-    
     var Kruskal = {}
-    
+
+    Graph.prototype.algorithms.kruskal = Kruskal;
+
     Kruskal.initialize = function(graph) {
         var k = {};
 

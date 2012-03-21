@@ -1,9 +1,9 @@
-define(['underscore-1.3.1'], function(underscore) {
+define(['underscore-1.3.1', 'graphs'], function(underscore, Graph) {
 
     var _ = this._;
     var Prim = {};
 
-
+    Graph.prototype.algorithms.prim = Prim;
     
     Prim.initialize = function(graph) { 
         var p = {};

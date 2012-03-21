@@ -1,4 +1,4 @@
-define(['jquery-1.7.1', 'graphs', 'd3/d3'], function($, Graph, d3) {
+define(['jquery-1.7.1', 'graphs', 'd3/d3', 'prim', 'kruskal'], function($, Graph, d3, prim, kruskal) {
 
     var $ = this.$;
     var d3 = this.d3;

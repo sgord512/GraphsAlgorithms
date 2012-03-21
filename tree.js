@@ -108,7 +108,6 @@ define(['underscore-1.3.1'], function(underscore) {
             path.unshift(node.side);
             node = node.parent;
         }
-        console.log("path: " + path);
         return path;
     }
 
@@ -126,7 +125,6 @@ define(['underscore-1.3.1'], function(underscore) {
             } else { return false; }
         });
         _.each(encoding, function(val, i) { sum = sum + val * Math.pow(2, i); });
-        console.log("sum: " + sum);
         return sum;
     }
     

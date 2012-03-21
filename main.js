@@ -1,4 +1,3 @@
-require(['mst_visualization', 'huffman_visualization'], function(mst_visualization, huffman_visualization) { 
-    mst_visualization();
-    huffman_visualization();
+require(['mst_visualization', 'huffman_visualization', 'tiling'], function(mst_visualization, huffman_visualization, tiling) { 
+    //mst_visualization();
 });

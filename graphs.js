@@ -1,4 +1,4 @@
-define(['underscore-1.3.1', 'edge', 'vertex', 'prim', 'kruskal'], function(underscore, Edge, Vertex, prim, kruskal) {
+define(['underscore-1.3.1', 'edge', 'vertex'], function(underscore, Edge, Vertex) {
 
     var _ = this._;
 
@@ -17,7 +17,7 @@ define(['underscore-1.3.1', 'edge', 'vertex', 'prim', 'kruskal'], function(under
         this.Vertex = Vertex;
     }
 
-    Graph.prototype.algorithms = { 'prim': prim, 'kruskal': kruskal };
+    Graph.prototype.algorithms = {}
 
     Graph.prototype.random_coords = function(prev) {
         return { 'x': (Math.random() * this.w), 'y': (Math.random() * this.h) };
@@ -74,10 +74,10 @@ define(['underscore-1.3.1', 'edge', 'vertex', 'prim', 'kruskal'], function(under
     }
 
     Graph.prototype.find_mst = function(settings) {
-        var algorithm_name = settings.algorithm || 'prim';
+        var algorithm_name = settings.algorithm;
         var algorithm = this.algorithms[algorithm_name].initialize(this);
         this.algorithm = algorithm;
-
+        if(_.isUndefined(this.algorithm)) { return false; }
         this.find_next_edge = algorithm.find_next_edge;
     }
     
