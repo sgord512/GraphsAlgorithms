@@ -1,4 +1,6 @@
 var port = process.env.PORT || 3000;
+var url = require('url');
+
 
 var pattern = /\w+\.html/
 
@@ -9,8 +11,9 @@ var app = connect()
     .use(connect.favicon())
     .use(connect.logger('short'))
     .use(connect.compress())
-    .use(connect.static(__dirname))
+//    .use(connect.static(__dirname))
     .use(function(req, res) {
+        console.log(url.parse(req.url))
         res.end("No content here. Sorry.\n");
     });
 
