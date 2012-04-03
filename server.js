@@ -1,9 +1,13 @@
-var port = process.env.PORT || 3000;
-var url = require('url');
+var requirejs = require('requirejs');
 
+requirejs.config({
+    nodeRequire: require 
+});
 
 var pattern = /\w+\.html/
 
+var port = process.env.PORT || 3000;
+var url = require('url');
 var connect = require('connect')
    ,http = require('http');
 
