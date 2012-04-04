@@ -1,6 +1,3 @@
-// Status: 
-// Should be working fine, dependencies all sorted out
-
 define(['lib/utilities','deps/underscore'], function(utilities, underscore) {
 
     var _ = underscore._;

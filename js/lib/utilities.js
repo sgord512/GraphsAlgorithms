@@ -15,6 +15,15 @@ define([], function() {
             return t;
         },
 
+        id_generator: function() { 
+            var id = 0;
+            return function() {
+                var _id = id;
+                id = id + 1;
+                return _id;
+            };
+        },
+
         generate_unique_id: function() {
             var id = next_id;
             next_id = next_id + 1;
