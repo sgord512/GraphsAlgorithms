@@ -14,6 +14,7 @@
   "dependencies": {
     "connect": "~2.0.2"
    ,"requirejs": "~1.0.7"
+   ,"handlebars": "~1.0.5beta"
   },
   "devDependencies": {}
 }
