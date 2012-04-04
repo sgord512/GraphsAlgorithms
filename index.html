@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html> <head>
-<title>It's a webpage!</title>
-<script type="text/javascript" data-main="main.js" src="require.js"></script>
+<title>{{ title }}</title>
+<script type="text/javascript" src="js/deps/require.js"></script>
+<script type="text/javascript">require.config({ 'baseUrl': "js" });</script>
+{{#if page}}{{run_page_script page}}{{/if}}
 </head>
 <body>
+{{#unless page}}<p>There is no content here. Sorry</p>{{/unless}}
 <div id="sketchpad"></div>
 </body> </html>

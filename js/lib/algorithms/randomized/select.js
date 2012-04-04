@@ -1,3 +1,5 @@
+define([], function() {
+
 var u = require('underscore');
 
 var arr = [1,2,3,4,5,6,7,8,9,10]
@@ -44,3 +46,5 @@ var contains_k_elements = function(arr, k) {
 //
 //}
 //
+
+});

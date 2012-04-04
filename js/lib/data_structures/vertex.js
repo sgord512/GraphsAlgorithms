@@ -1,5 +1,7 @@
-define([], function() {
+define(['deps/underscore'], function(underscore) {
     
+    var _ = underscore._;
+
     var Vertex = {};
 
     Vertex = function(x, y) {

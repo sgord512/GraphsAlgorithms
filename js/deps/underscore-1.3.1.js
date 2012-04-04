@@ -6,7 +6,9 @@
 //     For all details and documentation:
 //     http://documentcloud.github.com/underscore
 
-(function() {
+define(function(require, exports, module) {
+
+return (function() {
 
   // Baseline setup
   // --------------
@@ -996,4 +998,8 @@
     return this._wrapped;
   };
 
+    return _;
+
 }).call(this);
+
+});

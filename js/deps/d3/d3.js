@@ -1,3 +1,5 @@
+define([], function() {
+
 (function(){if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -4760,3 +4762,7 @@ function d3_behavior_zoomExtentClamp(x, i, k) {
       : Math.max(r0, Math.min(r1, x));
 }
 })();
+
+    return d3;
+
+});

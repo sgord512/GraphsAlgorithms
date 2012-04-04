@@ -1,25 +1,17 @@
-define(['underscore-1.3.1'], function(underscore) {
+// Status: 
+// Should be working fine, dependencies all sorted out
 
-    var _ = this._;
+define(['lib/utilities','deps/underscore'], function(utilities, underscore) {
+
+    var _ = underscore._;
     
     var Tree = {};
-
-    var generate_id = function() {
-        if(_.isUndefined(generate_id._next_id)) {
-            generate_id._next_id = 1;
-            return 0;
-        } else {
-            var next_id = generate_id._next_id;
-            generate_id._next_id = generate_id._next_id + 1;
-            return next_id;
-        }
-    }
 
     Tree = function() { 
         this.nodes = [];
         this.leaves = [];
         this.branches = [];
-        this.id = generate_id();
+        this.id = utilities.generate_unique_id();
     };
 
     Tree.isRoot = function(node) { 
@@ -74,7 +66,7 @@ define(['underscore-1.3.1'], function(underscore) {
         this.letter = letter;
         this.height = 0;
         this.depth = 0;
-        this.id = generate_id();
+        this.id = utilities.generate_unique_id();
     };
 
     Tree.Leaf.prototype.toString = function() {
@@ -87,7 +79,7 @@ define(['underscore-1.3.1'], function(underscore) {
         this.right = right;
         this.height = _.max([right.height, left.height]) + 1;
         this.depth = 0;
-        this.id = generate_id();
+        this.id = utilities.generate_unique_id();
     };
     
     var root = function() { 

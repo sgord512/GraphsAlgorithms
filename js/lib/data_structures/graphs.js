@@ -1,6 +1,6 @@
-define(['underscore-1.3.1', 'edge', 'vertex'], function(underscore, Edge, Vertex) {
+define(['deps/underscore', 'lib/data_structures/edge', 'lib/data_structures/vertex'], function(underscore, Edge, Vertex) {
 
-    var _ = this._;
+    var _ = underscore._;
 
     var Graph = {};
 

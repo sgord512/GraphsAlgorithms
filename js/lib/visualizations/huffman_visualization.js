@@ -1,8 +1,8 @@
-define(['underscore-1.3.1', 'jquery-1.7.1', 'd3/d3', 'huffman'], function(underscore, $, d3, Huffman) {
+define(['deps/underscore', 'deps/jq', 'deps/d3/d3', 'lib/algorithms/greedy/huffman'], function(underscore, jquery, d3, Huffman) {
 
-    var _ = this._;
-    var $ = this.$;
-    var d3 = this.d3;
+    var $ = jquery;
+    var _ = underscore._;
+    var d3 = d3;
 
     return function() { 
 

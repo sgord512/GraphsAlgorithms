@@ -1,3 +1,5 @@
+define([], function() {
+
 var u = require('underscore');
 
 var c = 10;
@@ -131,3 +133,5 @@ var edges = [new Edge(0,1)
             ]
 
 var g = new Graph(vertices, edges);
+
+});

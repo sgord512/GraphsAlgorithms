@@ -1,7 +1,7 @@
-define(['jquery-1.7.1', 'graphs', 'd3/d3', 'prim', 'kruskal'], function($, Graph, d3, prim, kruskal) {
+define(['deps/jq', 'lib/data_structures/graphs', 'deps/d3/d3', 'lib/algorithms/graph/prim', 'lib/algorithms/graph/kruskal'], function(jquery, Graph, d3, prim, kruskal) {
 
-    var $ = this.$;
-    var d3 = this.d3;
+    var $ = jquery;
+    var d3 = d3;
 
     return function() { 
 

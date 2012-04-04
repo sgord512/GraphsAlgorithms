@@ -1,6 +1,6 @@
-define(['underscore-1.3.1', 'graphs'], function(underscore, Graph) {
+define(['deps/underscore', 'lib/data_structures/graphs'], function(underscore, Graph) {
 
-    var _ = this._;
+    var _ = underscore._;
     var Prim = {};
 
     Graph.prototype.algorithms.prim = Prim;

@@ -1,8 +1,8 @@
-define(['underscore-1.3.1', 'graphs'], function(underscore, Graph) {
+define(['deps/underscore', 'lib/data_structures/graphs'], function(underscore, Graph) {
     
 
-    var _ = this._;
-    var Kruskal = {}
+    var _ = underscore._;
+    var Kruskal = {};
 
     Graph.prototype.algorithms.kruskal = Kruskal;
 

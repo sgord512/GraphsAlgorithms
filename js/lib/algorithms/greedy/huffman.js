@@ -1,6 +1,6 @@
-define(['underscore-1.3.1', 'tree'], function(underscore, Tree) {
+define(['deps/underscore', 'lib/data_structures/tree'], function(underscore, Tree) {
 
-    var _ = this._;
+    var _ = underscore._;
 
     var Huffman = {};
 
