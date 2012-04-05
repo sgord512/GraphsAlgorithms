@@ -3,6 +3,7 @@ var port = process.env.PORT || 3000;
 var pages = {
     'huffman': { name: 'huffman', path: 'lib/visualizations/huffman_visualization' }
     ,'mst': { name: 'mst', path: 'lib/visualizations/mst_visualization' }
+    ,'tree': { name: 'tree', path: 'lib/visualizations/tree_visualization' }
             }
 
 var requirejs = require('requirejs');
