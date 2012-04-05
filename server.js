@@ -19,7 +19,7 @@ var handlebars = requirejs('handlebars');
 
 handlebars.registerHelper('run_page_script', function(page) {
     return new handlebars.SafeString(
-        '<script type="text/javascript">require([\'' + page.path + '\'], function(' + page.name + ') { ' + page.name + '(); });</script>'
+        '<script type="text/javascript">require([\'' + page.path + '\'], function(' + page.name + ') { $(document).ready(' + page.name + '); });</script>'
     );
 });
 

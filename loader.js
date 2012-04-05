@@ -1,6 +1,7 @@
 var requirejs = require('requirejs');
 requirejs.config({
-    baseUrl: 'js'
+    baseUrl: 'js',
+    nodeRequire: require,
 });
 
-var lib = requirejs('lib/algorithms/drawing/tree_algorithms');
+var lib = requirejs('lib/visualizations/tree_visualization');
