@@ -1,4 +1,4 @@
-define(['deps/underscore', 'lib/data_structures/tree'], function(underscore, Tree) {
+define(['deps/under', 'lib/data_structures/tree'], function(underscore, Tree) {
 
     var _ = underscore._;
 

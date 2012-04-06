@@ -1,4 +1,4 @@
-define(['deps/underscore', 'deps/d3/d3', 'lib/algorithms/drawing/tree_algorithms', 'lib/data_structures/binary_tree'], function(underscore, d3, tree_drawing, bt) {
+define(['deps/under', 'deps/d3/d3', 'lib/algorithms/drawing/tree_algorithms', 'lib/data_structures/binary_tree'], function(underscore, d3, tree_drawing, bt) {
 
     var _ = underscore._;
     var d3 = d3;

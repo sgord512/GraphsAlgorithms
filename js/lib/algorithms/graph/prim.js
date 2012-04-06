@@ -1,4 +1,4 @@
-define(['deps/underscore', 'lib/data_structures/graphs'], function(underscore, Graph) {
+define(['deps/under', 'lib/data_structures/graphs'], function(underscore, Graph) {
 
     var _ = underscore._;
     var Prim = {};

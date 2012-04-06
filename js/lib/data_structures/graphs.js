@@ -1,4 +1,4 @@
-define(['deps/underscore', 'lib/data_structures/edge', 'lib/data_structures/vertex'], function(underscore, Edge, Vertex) {
+define(['deps/under', 'lib/data_structures/edge', 'lib/data_structures/vertex'], function(underscore, Edge, Vertex) {
 
     var _ = underscore._;
 

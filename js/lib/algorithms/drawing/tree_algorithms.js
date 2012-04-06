@@ -1,4 +1,4 @@
-define(['deps/underscore', 'lib/data_structures/binary_tree'], function(underscore, bt) {
+define(['deps/under', 'lib/data_structures/binary_tree'], function(underscore, bt) {
     
     var _ = underscore._;
     var BinaryTree = bt.BinaryTree;

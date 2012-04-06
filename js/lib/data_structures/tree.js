@@ -1,4 +1,4 @@
-define(['lib/utilities','deps/underscore'], function(utilities, underscore) {
+define(['lib/utilities','deps/under'], function(utilities, underscore) {
 
     var _ = underscore._;
     
