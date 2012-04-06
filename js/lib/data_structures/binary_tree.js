@@ -16,11 +16,15 @@ define(['lib/utilities', 'deps/underscore'], function(utilities, underscore) {
         this.id = generator();
         if(arguments.length === 2) {
             this.left = arguments[0];
+            if(!_.isUndefined(this.left)) { this.left.parent = this; }
             this.right = arguments[1];
+            if(!_.isUndefined(this.right)) { this.right.parent = this; }
         }
         else if(arguments.length === 0) {
             this.left = new Leaf();
+            this.left.parent = this;
             this.right = new Leaf();
+            this.left.parent = this;
         }
         else throw new Error("Either 0 or 2 arguments allowed for this function");
     }
@@ -42,7 +46,7 @@ define(['lib/utilities', 'deps/underscore'], function(utilities, underscore) {
     }
 
     Leaf.prototype.height = height;
-    BinaryTree.prototype.height = height;
+    BinaryTree.prototype.height = height;    
 
     return { Leaf: Leaf, BinaryTree: BinaryTree, nodes_in_order: nodes_in_order };
 

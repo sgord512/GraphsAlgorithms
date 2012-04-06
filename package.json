@@ -12,10 +12,10 @@
     "node": "~0.6.12"
   },
   "dependencies": {
-    "connect": ">=2.0.2"
-   ,"requirejs": ">=1.0.7"
-   ,"amdefine": ">=0.0.2"
+    "requirejs": ">=1.0.7"
    ,"handlebars": "1.0.5beta"
+   ,"node-static": ">=0.5.9"
+   ,"crossroads": ">=0.8.0"
   },
   "devDependencies": {}
 }

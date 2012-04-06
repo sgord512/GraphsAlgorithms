@@ -90,10 +90,16 @@ define(['deps/underscore', 'deps/d3/d3', 'lib/algorithms/drawing/tree_algorithms
 
         draw_tree(tree_drawing.example_tree, 'knuth_layered_wide');
         draw_tree(tree_drawing.example_tree, 'minimum_width');
+        draw_tree(tree_drawing.example_tree, 'third_algorithm');
         draw_tree(tree_drawing.example_tree2, 'knuth_layered_wide');
         draw_tree(tree_drawing.example_tree2, 'minimum_width');
+        draw_tree(tree_drawing.example_tree2, 'third_algorithm');
         draw_tree(tree_drawing.example_tree3, 'knuth_layered_wide');
         draw_tree(tree_drawing.example_tree3, 'minimum_width');
+        draw_tree(tree_drawing.example_tree3, 'third_algorithm');
+        draw_tree(tree_drawing.example_tree4, 'knuth_layered_wide');
+        draw_tree(tree_drawing.example_tree4, 'minimum_width');
+        draw_tree(tree_drawing.example_tree4, 'third_algorithm');
 
     };
 

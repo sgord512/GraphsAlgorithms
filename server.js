@@ -13,9 +13,25 @@ requirejs.config({
 
 var fs = requirejs('fs');
 var url = requirejs('url');
-var connect = requirejs('connect')
 var http = requirejs('http');
+var node_static = requirejs('node-static');
 var handlebars = requirejs('handlebars');
+var crossroads = requirejs('crossroads');
+
+crossroads.bypassed.add(function(request, response) { response.end("Nothing to see here. Sorry!"); });
+
+var js_server = new node_static.Server();
+
+crossroads.addRoute("/js/:module*:", function(request, response, module) {
+    console.log(module);
+    js_server.serve(request, response);
+});
+
+crossroads.addRoute("/{page}", function(request, response, page) { 
+    console.log("Sending " + page + " along the wire!!");
+    response.end(template({ 'title': page, 'page': pages[page] }));
+
+});
 
 handlebars.registerHelper('run_page_script', function(page) {
     return new handlebars.SafeString(
@@ -26,19 +42,12 @@ handlebars.registerHelper('run_page_script', function(page) {
 var index = fs.readFileSync('index.html', 'utf8');
 var template = handlebars.compile(index);
 
-var app = connect()
-    .use(connect.favicon())
-    .use(connect.logger('dev'))
-    .use(connect.compress())
-    .use('/js', connect.static(__dirname + '/js'))
-    .use(connect.staticCache())
-    .use(function(req, res) {
+var server = http.createServer(function(request, response) {
+    var req = url.parse(request.url);
+    crossroads.parse(req.pathname,[request, response]); 
+});
 
-        var request = url.parse(req.url);
-        res.end(template({ title: request.pathname, page: pages[request.path.slice(1)] }));
-    });
-
-http.createServer(app).listen(port);
+server.listen(port);
 
 console.log("Listening on port " + port);
     

@@ -4,4 +4,4 @@ requirejs.config({
     nodeRequire: require,
 });
 
-var lib = requirejs('lib/visualizations/tree_visualization');
+var lib = requirejs('lib/algorithms/drawing/tree_algorithms');
