@@ -1,53 +1,52 @@
-define(['lib/utilities', 'deps/underscore'], function(utilities, underscore) {
+define(['lib/utilities', 'deps/under'], function(utilities, underscore) {
     
     var _ = underscore._;
 
     var generator = utilities.id_generator();
 
-    var Leaf = {}
-
-    Leaf = function() { 
-        this.id = generator();
-    }
-
-    var BinaryTree = {}
-
-    BinaryTree = function() {
-        this.id = generator();
+    var node = function() {
+        var bt = utilities.inherit(methods);
+        bt.id = generator();
         if(arguments.length === 2) {
-            this.left = arguments[0];
-            if(!_.isUndefined(this.left)) { this.left.parent = this; }
-            this.right = arguments[1];
-            if(!_.isUndefined(this.right)) { this.right.parent = this; }
+            bt.left = arguments[0];
+            bt.right = arguments[1];
         }
         else if(arguments.length === 0) {
-            this.left = new Leaf();
-            this.left.parent = this;
-            this.right = new Leaf();
-            this.left.parent = this;
+            bt.left = undefined;
+            bt.right = undefined;
         }
-        else throw new Error("Either 0 or 2 arguments allowed for this function");
+        else throw new Error("Either 0 or 2 arguments allowed for this function, but called with: " + arguments.length);
+        return bt;
     }
 
-    var height = function() {
-        if(this instanceof Leaf) { return 0; }
-        else { return 1 + Math.max(this.left.height(), this.right.height()); }
+    var methods = { 
+        height: function() {
+            if(this.is_leaf()) { 
+                return 0; 
+            } else {
+                var children = [];
+                if(!_.isUndefined(this.left)) { children.unshift(this.left.height()); }
+                if(!_.isUndefined(this.right)) { children.unshift(this.right.height()); }
+                return 1 + _.max(children);
+            }
+        },
+
+        is_leaf: function() { 
+            return _.isUndefined(this.left) && _.isUndefined(this.right);
+        }
     }
 
     var nodes_in_order = function(node) {
-        if(node === undefined) { return []; }
-        else if(node instanceof Leaf) { return [node]; }
-        else if(node instanceof BinaryTree) {
-            var left = nodes_in_order(node.left);
-            var middle = [node];
-            var right = nodes_in_order(node.right);
-            return left.concat(middle).concat(right);
+        if(node.is_leaf()) { return [node]; }
+        else {
+            var list = []
+            if(node.left) { list = list.concat(nodes_in_order(node.left)); }
+            list = list.concat([node]);
+            if(node.right) { list = list.concat(nodes_in_order(node.right)); }
+            return list;
         }
     }
 
-    Leaf.prototype.height = height;
-    BinaryTree.prototype.height = height;    
-
-    return { Leaf: Leaf, BinaryTree: BinaryTree, nodes_in_order: nodes_in_order };
+    return { node: node, nodes_in_order: nodes_in_order };
 
 });

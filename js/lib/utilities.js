@@ -32,6 +32,10 @@ define([], function() {
         
         random_index: function(l) {
             return Math.floor(Math.random() * l);
+        },
+
+        inherit: function(o) {
+            return Object.create(o);
         }
         
     }
