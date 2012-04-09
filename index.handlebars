@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html> <head>
+<title>{{ title }}</title>
+</head>
+<body>
+<ul>
+{{#each pages}}<li><a href="/{{this.name}}">{{this.name}}</a>: {{this.description}}</li>{{/each}}  
+</ul>
+<div id="sketchpad"></div>
+</body> </html>
