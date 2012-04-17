@@ -1,4 +1,4 @@
-define(['deps/under', 'lib/data_structures/graphs'], function(underscore, Graph) {
+define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore, Graph) {
     
 
     var _ = underscore._;
@@ -28,9 +28,9 @@ define(['deps/under', 'lib/data_structures/graphs'], function(underscore, Graph)
       
 
         _.each(graph.vertices, function(v) {
-            k.forests.push(new k.Forest(v.index, [v]));
+            k.forests.push(new k.Forest(v.id, [v]));
             graph.addToMST(v);
-            v.forest = v.index;
+            v.forest = v.id;
         });
         
         k.find_next_edge = function() {
@@ -91,16 +91,16 @@ define(['deps/under', 'lib/data_structures/graphs'], function(underscore, Graph)
 
 
         k.connects_two_forests = function(e) { 
-            var result = e.start_point.forest !== e.end_point.forest;
+            var result = e.start_point().forest !== e.end_point().forest;
             return result;
         }
 
         k.first_forest_index = function(e) {
-            return _.min([e.start_point.forest, e.end_point.forest]);
+            return _.min([e.start_point().forest, e.end_point().forest]);
         }
 
         k.second_forest_index = function(e) {
-            return _.max([e.start_point.forest, e.end_point.forest]);
+            return _.max([e.start_point().forest, e.end_point().forest]);
         }
 
         return k;

@@ -1,4 +1,4 @@
-define(['lib/data_structures/graphs', 'deps/d3/d3', 'lib/algorithms/graph/prim', 'lib/algorithms/graph/kruskal'], function(Graph, d3, prim, kruskal) {
+define(['lib/algorithms/graph/random_graph', 'deps/d3', 'lib/algorithms/graph/prim', 'lib/algorithms/graph/kruskal'], function(Graph, d3, prim, kruskal) {
 
     var d3 = d3;
 
@@ -88,10 +88,10 @@ define(['lib/data_structures/graphs', 'deps/d3/d3', 'lib/algorithms/graph/prim',
                 .data(graph.edge_list)
                 .enter()
                 .append("svg:line")
-                .attr("x1", function(d) { return dx(d.start_point.x); })
-                .attr("y1", function(d) { return dy(d.start_point.y); })
-                .attr("x2", function(d) { return dx(d.end_point.x); })
-                .attr("y2", function(d) { return dy(d.end_point.y); })
+                .attr("x1", function(d) { return dx(d.start_point().x); })
+                .attr("y1", function(d) { return dy(d.start_point().y); })
+                .attr("x2", function(d) { return dx(d.end_point().x); })
+                .attr("y2", function(d) { return dy(d.end_point().y); })
                 .style("stroke", graph.color);
 
             group.selectAll("circle")

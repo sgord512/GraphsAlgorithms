@@ -64,11 +64,13 @@ define(['deps/under', 'lib/data_structures/binary_tree'], function(underscore, b
 
         third_algorithm: function(tree) {
             var next_pos_on_level = {};
-
+            var last_shift_on_level = {};
             var max_height = tree.height();
-
+            var modifier_sum = 0;
+            
             var initial_position = function(node, depth) {
                 if(!next_pos_on_level[depth]) { next_pos_on_level[depth] = 0; };
+                if(!last_shift_on_level[depth]) { last_shift_on_level[depth] = 0; };
                 node.y = depth;
                 if(node.is_leaf()) { 
                     node.place = next_pos_on_level[depth];
@@ -77,29 +79,25 @@ define(['deps/under', 'lib/data_structures/binary_tree'], function(underscore, b
                 } else if(!node.right) { 
                     node.place = node.left.x + 1;
                 } else {
-                    node.place = ((node.left.x + node.right.x) / 2);
+                    node.place = Math.floor((node.left.x + node.right.x) / 2);
                 }
                 if(node.is_leaf()) {
                     node.x = node.place;
                     next_pos_on_level[depth] = node.x + 2;
+                    node.amount_shifted = 0;
                 } else {
-                    node.x = node.place;
                     var diff = next_pos_on_level[depth] - node.place;
-                    if(diff >= 0) { shift(node, diff, depth); }
-                    next_pos_on_level[depth] = node.x + 2;
+                    if(diff > 0) {
+                        node.amount_shifted = diff;
+                        node.x = next_pos_on_level[depth];
+                    } else {
+                        node.amount_shifted = 0;
+                        node.x = node.place;
+                    }
+                    next_pos_on_level[depth] = node.x + 2;                    
                 }
-
-                console.log("Next positions");
-                console.log(next_pos_on_level);
             };
 
-            var shift = function(node, n, depth) {
-                node.x = node.x + n;
-
-                if(node.left) { shift(node.left, n, depth + 1); }
-                if(node.right) { shift(node.right, n, depth + 1); }
-            };
-                          
             var initial_traverse = function(node, depth) {
                 if(node.is_leaf()) {
                     initial_position(node, depth);
@@ -112,8 +110,13 @@ define(['deps/under', 'lib/data_structures/binary_tree'], function(underscore, b
             };
 
             var final_position = function(node, depth) {
-                node.x = node.x + modifier_sum;
-                modifier_sum = modifier_sum + node.modifier;
+                var last_shift = last_shift_on_level[depth]
+                if(node.is_leaf()) { last_shift = 0; }
+                var total_modifier = Math.max(modifier_sum, last_shift);
+                node.x = node.x + total_modifier;
+                last_shift_on_level[depth] = total_modifier;
+                modifier_sum = modifier_sum + node.amount_shifted;
+              
             };
 
             var adjustment_traverse = function(node, depth) {
@@ -121,19 +124,18 @@ define(['deps/under', 'lib/data_structures/binary_tree'], function(underscore, b
                     final_position(node, depth);
                 } else {                
                     final_position(node, depth);
-                    if(node.left) { adjustment_traverse(node.left, depth + 1); }
-                    if(node.right) { 
-                        modifier_sum = modifier_sum - node.right.modifier;
-                        adjustment_traverse(node.right, depth + 1); }
+                    if(node.left) {
+                        adjustment_traverse(node.left, depth + 1); 
+                    } if(node.right) { 
+                        adjustment_traverse(node.right, depth + 1); 
+                    }
+                    modifier_sum = modifier_sum - node.amount_shifted;
                 }
                 
             };
 
             initial_traverse(tree, 0);
-     //       console.log("Next positions");
-       //     console.log(next_pos_on_level);
-//            console.log(bt.nodes_in_order(tree));
-  //          adjustment_traverse(tree, 0);
+            adjustment_traverse(tree, 0);
             return position_lookup(tree);
         }
     }

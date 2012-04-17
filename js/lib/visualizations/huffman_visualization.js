@@ -1,4 +1,4 @@
-define(['deps/under', 'deps/d3/d3', 'lib/algorithms/greedy/huffman'], function(underscore, d3, Huffman) {
+define(['deps/under', 'deps/d3', 'lib/algorithms/greedy/huffman'], function(underscore, d3, Huffman) {
 
     var _ = underscore._;
     var d3 = d3;

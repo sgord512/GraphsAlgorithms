@@ -1,4 +1,4 @@
-define(['deps/under', 'lib/data_structures/graphs'], function(underscore, Graph) {
+define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore, Graph) {
 
     var _ = underscore._;
     var Prim = {};
@@ -35,9 +35,9 @@ define(['deps/under', 'lib/data_structures/graphs'], function(underscore, Graph)
                 console.log("out of luck"); return false;
             }
             if(p.incident_to_start(next_edge)) {
-                added_point = next_edge.end_point;
+                added_point = next_edge.end_point();
             } else if(p.incident_to_end(next_edge)) {
-                added_point = next_edge.start_point;
+                added_point = next_edge.start_point();
             }
             else console.log("This shouldn't happen");
 
@@ -53,11 +53,11 @@ define(['deps/under', 'lib/data_structures/graphs'], function(underscore, Graph)
         }
 
         p.incident_to_start = function(e) {
-            return _.include(graph.vertices_in_tree, e.start_point);
+            return _.include(graph.vertices_in_tree, e.start_point());
         }
 
         p.incident_to_end = function(e) {
-            return _.include(graph.vertices_in_tree, e.end_point);
+            return _.include(graph.vertices_in_tree, e.end_point());
         }
 
         return p;

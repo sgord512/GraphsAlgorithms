@@ -10,7 +10,7 @@ Algorithms in Progress or Complete
 - Edit Distance
 - Karger's Min Cut
 - Longest Palincomplementary Sequence
-- k-th Selection (Randomized)
+- k-th Selection (Randomized / Deterministic Linear Time)
 - Hexagonal Tiling
 - Viterbi's Algorithm
 - Hadamard Matrices
@@ -46,3 +46,6 @@ like to make that better. Ideas:
 
 4. I could try animating some data structures.
 
+5. Fix the MST code by getting the edge weight function to work again...
+- Somehow it is currently invalid to do what I am doing with the creation of the function independent from the assignment to it.
+- I fixed it, but it is ugly. I can't get a clean edge implementation for MSTs that I like to use for other purposes.

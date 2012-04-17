@@ -1,6 +1,6 @@
-define([], function() { 
+define(["lib/utilities", "deps/under"], function(utilities, underscore) { 
 
-    var u = require('underscore');
+    var _ = underscore._;
 
     var counter = 1;
 

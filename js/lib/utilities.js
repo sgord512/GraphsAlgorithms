@@ -1,15 +1,15 @@
 define([], function() { 
     
     var next_id = 0;
-    
+
     return {
 
-        generate_table: function(x, y, entry) {
+        generate_table: function(y, x, entry) {
             var t = [];
-            for(var i = 0; i < x; i++) {
-                t[i] = [];
-                for(var j = 0; j < y; j++) {
-                    t[i][j] = entry;
+            for(var j = 0; j < y; j++) {
+                t[j] = [];
+                for(var i = 0; i < x; i++) {
+                    t[j][i] = entry;
                 }
             }
             return t;
@@ -24,12 +24,6 @@ define([], function() {
             };
         },
 
-        generate_unique_id: function() {
-            var id = next_id;
-            next_id = next_id + 1;
-            return id;
-        },
-        
         random_index: function(l) {
             return Math.floor(Math.random() * l);
         },
@@ -72,10 +66,38 @@ define([], function() {
 
         to_ordinal_string: function(number) {
             var th = 'th'
-            var map = { 1: 'st', 2: 'nd', 3: 'rd', 4: th, 5: th, 6: th, 7: th, 8: th, 9: th, 0: th };
-            if(number === 1) { return 'the'; }
-            return "" + number + map[number % 10];
+            var map = { 1: 'st', 2: 'nd', 3: 'rd' }
+            if(number === 1) { 
+                return 'the';
+            }
+            else {
+                var suffix = map[number % 10] || 'th';
+                return "" + number + suffix;
+            }
+        },
+
+        to_binary: function(number) { 
+            var num = number;
+            var binary_string = '';
+            var div = Math.floor(num / 2);
+            var rem = num % 2;
+            while(num > 0) {
+                div = Math.floor(num / 2);
+                rem = num % 2;
+                binary_string = String(rem) + binary_string;
+                num = div;
+            }
+            return binary_string;
+        },
+
+        pad_front_to_length: function(s, length, c) {
+            var num = length - s.length;
+            var padding = "";
+            for(var i = 0; i < num; i++) {
+                padding = padding + c;
+            }
+            return padding + s;
         }
-        
+
     }
 });

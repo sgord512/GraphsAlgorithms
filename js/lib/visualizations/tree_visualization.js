@@ -1,7 +1,6 @@
-define(['deps/under', 'deps/d3/d3', 'lib/algorithms/drawing/tree_algorithms', 'lib/data_structures/binary_tree'], function(underscore, d3, tree_drawing, bt) {
+define(['deps/under', 'deps/d3', 'lib/miscellaneous/grid', 'lib/algorithms/drawing/tree_algorithms', 'lib/data_structures/binary_tree'], function(underscore, d3, Grid, tree_drawing, bt) {
 
     var _ = underscore._;
-    var d3 = d3;
     var node = bt.node;
 
     var algorithm_to_color_map = { 'knuth_layered_wide': 'red',
@@ -10,32 +9,20 @@ define(['deps/under', 'deps/d3/d3', 'lib/algorithms/drawing/tree_algorithms', 'l
                                  };
 
     var examples = {
-         t1: node(node(), node(node(node(node(), undefined), undefined), undefined))
-        ,t2: node(node(), node())
+         t1: node(node(), node())
+        ,t2: node(node(), node(node(node(node(), undefined), undefined), undefined))
         ,t3: node(node(node(node(node(), node()), node()), node()), node(node(), node()))
         ,t4: node(node(node(), node(node(), node())), node(undefined, node(undefined, node(node(node(node(), node()), node()), undefined))))
-        ,t5: node(node(node(node(node(node(), node(node(), node(node(), node(node(), node())))),node()), node()), node()), node(node(),node(node(),node(node(),node(node(node(node(node(node(),node()),node()),node()),node()),node())))))
+        ,t5: node(node(node(node(node(node(), node(node(), node(node(), node(node(), node())))),node()), node()), node()), node(node(),node(node(),node(node(),node(node(node(node(node(),node()),node()),node()),node())))))
     };
 
     return function() { 
 
-        var h = 7/8 * screen.height;
+        var h = screen.height - 10;
         var w = screen.width - 10;
-        var grid_size = 20;
+        var grid = Grid('unbounded', 20);
         var r = 8;
-        
-        var grid_x = function(x) { return grid_size * x; }
-
-        var grid_y = function(y) { return grid_size * y; }
-
-        var get_origin_corner = function(d) {
-            return { x: grid_x(d.x), y: grid_y(d.y) };
-        }
-
-        var get_center_square = function(d) {
-            var corner = get_origin_corner(d);
-            return { x: corner.x + grid_size / 2, y: corner.y + grid_size / 2 };
-        }
+        var separator = 20;
 
         var transform_string = function(x, y) {
             return "translate(" + x + "," + y + ") ";
@@ -47,7 +34,7 @@ define(['deps/under', 'deps/d3/d3', 'lib/algorithms/drawing/tree_algorithms', 'l
             .attr("width", w)
             .attr("shape-rendering", 'geometricPrecision');
 
-        
+        grid.draw_grid_lines(canvas);
 
         var draw_tree = (function() {
             
@@ -65,11 +52,11 @@ define(['deps/under', 'deps/d3/d3', 'lib/algorithms/drawing/tree_algorithms', 'l
                 var color = algorithm_to_color_map[algorithm];
 
                 var table = drawing_algorithm(tree);
-                var lookup = function(d) { return get_center_square(table[d.id]); };
+                var lookup = function(d) { return grid.coord_rect_middle(table[d.id]); };
                 var node_coords = _.map(nodes, lookup);
                 var xs = _.pluck(node_coords, 'x');
                 var ys = _.pluck(node_coords, 'y');
-                var tree_bounds = { x: _.max(xs) + grid_size / 2, y: _.max(ys) + grid_size / 2 };
+                var tree_bounds = { x: _.max(xs) + grid.unit / 2, y: _.max(ys) + grid.unit / 2 };
                 _draw_tree.bounds = tree_bounds;
                 
                 var parents = _.reject(nodes, function(d) { return d.is_leaf(); });
@@ -112,7 +99,7 @@ define(['deps/under', 'deps/d3/d3', 'lib/algorithms/drawing/tree_algorithms', 'l
             draw_tree(tree, 'minimum_width', first_bounds);
             var second_bounds = { x: draw_tree.bounds.x + first_bounds.x, y: bounds.y };
             draw_tree(tree, 'third_algorithm', second_bounds);
-            bounds.y = draw_tree.bounds.y + bounds.y + 8;
+            bounds.y = draw_tree.bounds.y + bounds.y + separator;
         });
 
     };

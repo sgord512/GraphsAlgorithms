@@ -13,6 +13,14 @@ var pages = {
                path: 'lib/visualizations/tree_visualization',
                description: "Comparisons of different algorithms for drawing trees."
              }
+    ,'life': { name: 'life',
+               path: 'lib/visualizations/life_visualization',
+               description: "Simulation of Conway's Game of Life"
+             }
+    ,'ca': { name: 'ca',
+             path: 'lib/visualizations/automata_visualization',
+             description: "Simulation of 1d elementary cellular automata"
+           }
 }
 
 var requirejs = require('requirejs');
@@ -30,7 +38,7 @@ var u = requirejs('underscore');
 
 crossroads.bypassed.add(function(request, response) { response.end("Nothing to see here. Sorry!"); });
 
-var js_server = new node_static.Server();
+var js_server = new node_static.Server('.', { cache: 0 });
 
 var index = fs.readFileSync('index.handlebars', 'utf8');
 var index_template = handlebars.compile(index);
