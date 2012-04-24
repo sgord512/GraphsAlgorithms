@@ -15,7 +15,15 @@ Algorithms in Progress or Complete
 - Viterbi's Algorithm
 - Hadamard Matrices
 - Wood-Splitting (String-breaking algorithm, don't know the official name)
+- Conway's Game of Life Simulation
+- Elementary Cellular Automata Simulation
 
+- And a whole bunch more that I haven't documented yet...
+
+- Next commit will have a whole bunch of bookkeeping, and documentation. 
+  I have so much implemented by now, that it is becoming increasingly difficult to keep track of what code I have.
+
+- Also, this is OUT-OF-DATE, and so is TODO.md
 
 TODO
 ----
@@ -46,6 +54,4 @@ like to make that better. Ideas:
 
 4. I could try animating some data structures.
 
-5. Fix the MST code by getting the edge weight function to work again...
-- Somehow it is currently invalid to do what I am doing with the creation of the function independent from the assignment to it.
-- I fixed it, but it is ugly. I can't get a clean edge implementation for MSTs that I like to use for other purposes.
+5. 

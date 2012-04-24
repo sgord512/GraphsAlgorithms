@@ -21,6 +21,16 @@ var pages = {
              path: 'lib/visualizations/automata_visualization',
              description: "Simulation of 1d elementary cellular automata"
            }
+/*
+    ,'ford': { name: 'ford',
+               path: 'lib/visualizations/ford_fulkerson_visualization',
+               description: "Visualization of the Ford Fulkerson algorithm for computing max flow"
+             }
+    ,'ta_hours': { name: 'ta_hours',
+                   path: 'lib/visualizations/ta_hours_visualization',
+                   description: "Visualization of the integer programming solution to the TA Hours problem"
+                 }
+*/
 }
 
 var requirejs = require('requirejs');

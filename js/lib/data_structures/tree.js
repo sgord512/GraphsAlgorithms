@@ -4,11 +4,13 @@ define(['lib/utilities','deps/under'], function(utilities, underscore) {
     
     var Tree = {};
 
+    var generator = utilities.id_generator();
+
     Tree = function() { 
         this.nodes = [];
         this.leaves = [];
         this.branches = [];
-        this.id = utilities.generate_unique_id();
+        this.id = generator();
     };
 
     Tree.isRoot = function(node) { 
@@ -63,7 +65,7 @@ define(['lib/utilities','deps/under'], function(utilities, underscore) {
         this.letter = letter;
         this.height = 0;
         this.depth = 0;
-        this.id = utilities.generate_unique_id();
+        this.id = generator();
     };
 
     Tree.Leaf.prototype.toString = function() {
@@ -76,7 +78,7 @@ define(['lib/utilities','deps/under'], function(utilities, underscore) {
         this.right = right;
         this.height = _.max([right.height, left.height]) + 1;
         this.depth = 0;
-        this.id = utilities.generate_unique_id();
+        this.id = generator();
     };
     
     var root = function() { 

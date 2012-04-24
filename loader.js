@@ -4,6 +4,6 @@ requirejs.config({
     nodeRequire: require,
 });
 
-var lib = requirejs('lib/miscellaneous/elementary_automata');
+var lib = requirejs('lib/algorithms/linear_programming/ta_hours')
 
-var a = new lib({ x: 5, mode: 'toroidal', rules: 110 });
+var result = lib.as_flow_network(lib.examples.first);

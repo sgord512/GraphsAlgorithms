@@ -28,6 +28,10 @@ define([], function() {
             return Math.floor(Math.random() * l);
         },
 
+        random_element: function(arr) { 
+            return arr[Math.floor(Math.random() * arr.length)];
+        },
+
         inherit: function(o) {
             return Object.create(o);
         },

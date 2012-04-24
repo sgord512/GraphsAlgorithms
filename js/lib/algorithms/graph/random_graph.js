@@ -1,6 +1,50 @@
-define(['deps/under', 'lib/data_structures/graph','lib/data_structures/edge', 'lib/data_structures/vertex'], function(underscore, Graph, Edge, Vertex) {
+define(['deps/under'], function(underscore) {
 
     var _ = underscore._;
+
+    var vertex_generator = utilities.id_generator();
+
+    var Vertex = {};
+
+    Vertex = function() {
+        this.id = vertex_generator();
+    };
+
+    Vertex.prototype.toString = function() { return "id: " + this.id; };
+
+    var edge_generator = utilities.id_generator();
+
+    var Edge = {};
+
+    Edge = function(start, end, g) {
+        if(start < end) {
+            this.start = start;
+            this.end = end;
+        }
+        else if(start > end) {
+            this.start = end;
+            this.end = start;
+        }
+        else if(start == end) {
+            this.self_loop = true;
+        }
+
+        this.id = edge_generator();
+        this.g = g;
+    }
+
+    Edge.prototype.toString = function() { 
+        return "id: " + this.id + "\n" + this.start + " to " + this.end;
+    };
+
+    var Graph = {};
+    
+    Graph = function() { 
+        this.edge_list = [];
+        this.vertices = [];
+        this.Edge = Edge;
+        this.Vertex = Vertex;
+    }
 
     var generate_graph = function(config) {
         var c = config || {};
