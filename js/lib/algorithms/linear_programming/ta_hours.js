@@ -45,7 +45,7 @@ define(["deps/under", "lib/utilities", "lib/algorithms/graph/ford_fulkerson"], f
         var day_index = function(day) { return day_offset - 1 + day; }
 
         _.each(problem.days, function(day) {
-            nodes.push([nodes.length, day[0]]);
+            nodes.push([nodes.length, day[1]]);
         });
 
         var min_hours = nodes.length;
