@@ -4,6 +4,10 @@ requirejs.config({
     nodeRequire: require,
 });
 
-var lib = requirejs('lib/algorithms/linear_programming/ta_hours')
+var SplayTree = requirejs('lib/data_structures/splay_tree');
+var Set = requirejs('lib/data_structures/set')(SplayTree);
 
-var result = lib.as_flow_network(lib.examples.first);
+var st = new Set();
+
+st.insert(1).insert(3).insert(2);
+

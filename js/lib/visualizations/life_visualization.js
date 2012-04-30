@@ -58,7 +58,7 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/grid', 'lib/miscellaneous/li
         var rows = Math.floor(h / unit_size);
         var cols = Math.floor(w / unit_size);
 
-        var life = new Life({ x: cols, y: rows, mode: 'toroidal', initial_state: configurations['gun'] });
+        var life = new Life({ x: cols, y: rows, mode: 'toroidal', initial_state: configurations['acorn'] });
 
         var canvas = d3.select("#sketchpad")
             .append("svg:svg")
