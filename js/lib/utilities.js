@@ -101,7 +101,33 @@ define([], function() {
                 padding = padding + c;
             }
             return padding + s;
+        },
+
+        memoize: function(fn) {
+            var table = []
+            return function(input) {
+                if(table[input]) {
+                    return table[input];
+                } else {
+                    var value = fn(input);
+                    table[input] = value;
+                    return value; 
+                }
+            }
+        },
+
+        object_to_array: function(obj) {
+            var arr = [];
+            for(var prop in obj) {
+                arr.push({ name: prop, value: obj[prop] });
+            }
+            return arr;
+        },
+
+        translation: function(x, y) {
+            return "translate(" + x + "," + y + ") ";
         }
+
 
     }
 });

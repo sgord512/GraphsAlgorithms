@@ -2,30 +2,36 @@ var port = process.env.PORT || 3000;
 
 var pages = {
     'huffman': { name: 'huffman',
-                 path: 'lib/visualizations/huffman_visualization',
+                 path: 'lib/visualizations/huffman_page',
                  description: "Visualize the creation of a Huffman code from character frequencies."
                }
     ,'mst': { name: 'mst',
-              path: 'lib/visualizations/mst_visualization',
+              path: 'lib/visualizations/mst_page',
               description: "Side-by-side animations of Prim's and Kruskal's algorithms for building a minimum spanning tree."
             }
     ,'tree': { name: 'tree', 
-               path: 'lib/visualizations/tree_visualization',
+               path: 'lib/visualizations/tree_page',
                description: "Comparisons of different algorithms for drawing trees."
              }
     ,'life': { name: 'life',
-               path: 'lib/visualizations/life_visualization',
-               description: "Simulation of Conway's Game of Life"
+               path: 'lib/visualizations/cellular_automata/life_page',
+               description: "Simulation of Conway's Game of Life."
              }
     ,'ca': { name: 'ca',
-             path: 'lib/visualizations/automata_visualization',
-             description: "Simulation of 1d elementary cellular automata"
+             path: 'lib/visualizations/cellular_automata/automata_page',
+             description: "Simulation of 1d elementary cellular automata."
            }
-/*
-    ,'ford': { name: 'ford',
-               path: 'lib/visualizations/ford_fulkerson_visualization',
-               description: "Visualization of the Ford Fulkerson algorithm for computing max flow"
+
+    ,'hanoi': { name: 'hanoi',
+                path: 'lib/visualizations/hanoi_page',
+                description: "Animated Towers of Hanoi solver."
+              } 
+
+    ,'dihedral': { name: 'dihedral',
+               path: 'lib/visualizations/groups/group_page',
+               description: "Visualization of the dihedral group of order 8."
              }
+/*
     ,'ta_hours': { name: 'ta_hours',
                    path: 'lib/visualizations/ta_hours_visualization',
                    description: "Visualization of the integer programming solution to the TA Hours problem"
@@ -59,6 +65,11 @@ crossroads.addRoute("", function(request, response) {
 
 crossroads.addRoute("/js/{module*}", function(request, response, module) {
     console.log(module);
+    js_server.serve(request, response);
+});
+
+crossroads.addRoute(/^\/([a-z]+\.css)/, function(request, response, css) {
+    console.log("CSS file: " + css);
     js_server.serve(request, response);
 });
 

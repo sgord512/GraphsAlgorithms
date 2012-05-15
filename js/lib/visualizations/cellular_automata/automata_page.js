@@ -4,8 +4,8 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/grid', 'lib/miscellaneous/el
     var d3 = d3;
 
     var unit_size = 5;
-    var h = screen.height - 10;
-    var w = screen.width - 10;
+    var h = screen.availHeight - 10;
+    var w = screen.availWidth - 10;
     var step = 50;
 
     return function() { 

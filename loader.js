@@ -4,10 +4,17 @@ requirejs.config({
     nodeRequire: require,
 });
 
-var SplayTree = requirejs('lib/data_structures/splay_tree');
-var Set = requirejs('lib/data_structures/set')(SplayTree);
+var u = requirejs('lib/utilities');
 
-var st = new Set();
+// var fib = function(n) {
+//     if(n === 1 || n === 2) {
+//         return 1;
+//     } else { 
+//         return fib(n-1) + fib(n-2);
+//     }
+// }
 
-st.insert(1).insert(3).insert(2);
+var QuaternionGroup = requirejs('lib/miscellaneous/groups/quaternion_group');
+
+var q = new QuaternionGroup();
 

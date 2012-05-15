@@ -72,4 +72,39 @@ describe("Splay Tree", function() {
     });
 
 });
+
+describe("Towers of Hanoi Solver", function() {
+    var lib = requirejs('lib/miscellaneous/hanoi');
+
+    it("Should solve the towers of Hanoi puzzle in the minimum number of moves", function() {
+        (lib.hanoi_solver(3)).should.equal(7);
+        (lib.hanoi_step_solver(3)).should.equal(26);
+    });
+
+});
+
+describe("Matrix Multiplication Verifier", function() {
+    var lib = requirejs('lib/miscellaneous/matrix_multiplication_verifier');
+
+    it("Should correctly determine that AB does not equal CD", function() {
+        lib.monte_carlo_verify(lib.A, lib.B, lib.C, lib.D).should.not.be.ok;
+        lib.monte_carlo_verify(lib.E, lib.F, lib.G, lib.H).should.be.ok;
+    });
+
+});
+
+describe("Queue", function() {
+    var lib = requirejs('lib/data_structures/queue');
+    
+    var a = new lib();
+    
+    a.enqueue(4).enqueue(5).enqueue(6);
+
+    it("Should correctly be FIFO", function() {
+        a.dequeue().should.equal(4);
+        a.dequeue().should.equal(5);
+        a.dequeue().should.equal(6);
+        should.not.exist(a.dequeue());
+    });
+});
         
