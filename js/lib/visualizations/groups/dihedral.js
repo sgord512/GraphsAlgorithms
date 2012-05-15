@@ -1,4 +1,4 @@
-define(['deps/under', 'deps/d3', 'lib/miscellaneous/groups/dihedral_group', 'lib/miscellaneous/graphics_2d/polygons'], function(underscore, d3, DihedralGroup, Polygons) {
+define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/groups/dihedral_group', 'lib/miscellaneous/graphics_2d/polygons'], function(underscore, utilities, d3, DihedralGroup, Polygons) {
 
     var _ = underscore._;
 
@@ -62,18 +62,22 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/groups/dihedral_group', 'lib
             return indexed_polygon;
         }
 
-        var redraw_polygon = function(d) { 
+        var redraw_polygon = function(canvas, d) { 
+            var points = make_display_polygon(d.element);
+            
             canvas.selectAll("g#" + d.id + " > circle")
-                .data(d.points)
+                .data(points)
                 .attr("fill", vertex_color);
         }
 
-        var draw_polygon = function(d, x, y) {
+        var draw_polygon = function(canvas, d, x, y) {
+            var points = make_display_polygon(d.element);
+            
             var g = canvas.append("svg:g")
                 .attr("id", d.id)
                 .attr("transform", utilities.translation(x, y));
 
-            var points_string = _.reduce(d.points, function(str, p) { return str + p.x + "," + p.y + " "; }, "");
+            var points_string = _.reduce(points, function(str, p) { return str + p.x + "," + p.y + " "; }, "");
 
             var polygon = g.append("svg:polygon")
                 .attr("class", "polygon")
@@ -83,12 +87,12 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/groups/dihedral_group', 'lib
                 .attr("stroke", d3.rgb("lightgrey"));
                         
             g.selectAll("circle")
-                .data(d.points)
+                .data(points)
                 .enter()
                 .append("svg:circle")
                 .attr("cx", function(d) { return d.x; })
                 .attr("cy", function(d) { return d.y; })
-                .attr("r", edge / 4)
+                .attr("r", radius / 4)
                 .attr("fill", vertex_color)
                 .attr("stroke-width", 2)
                 .attr("stroke", d3.rgb("lightgrey"));
@@ -96,7 +100,9 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/groups/dihedral_group', 'lib
 
         return {
             generate_element_name: generate_element_name,
-            group: group
+            group: group,
+            redraw_polygon: redraw_polygon,
+            draw_polygon: draw_polygon
         };
 
     };
