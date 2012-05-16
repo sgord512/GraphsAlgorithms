@@ -126,7 +126,27 @@ define([], function() {
 
         translation: function(x, y) {
             return "translate(" + x + "," + y + ") ";
+        },
+
+        factorial: function(n) {
+            var product = 1;
+            if(n < 0) { 
+                throw new Error("Argument to factorial must be non-negative integer."); 
+            } else { 
+                for(var i = 0; i <= n; i++) {
+                    if(i === 0) {
+                        product = product * 1;
+                    } else {
+                        product = product * i;
+                    }
+                }
+            }
+            return product;
         }
+
+
+
+        
 
 
     }
