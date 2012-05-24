@@ -9,7 +9,7 @@
     "url": "git://github.com/sgord512/GraphsAlgorithms.git"
   },
   "engines": {
-    "node": "~0.6.18"
+    "node": "~0.6.17"
   },
   "dependencies": {
     "requirejs": ">=1.0.7"
@@ -17,11 +17,7 @@
    ,"node-static": ">=0.5.9"
    ,"crossroads": ">=0.8.0"
    ,"underscore": ">=1.3.1"
-<<<<<<< HEAD
    ,"winston": ">=0.5.11"
-=======
-   ,"winston": ">=0.5.11
->>>>>>> d19346010e37c5a3e17ce07ad99993fd27979065
   },
   "devDependencies": {}
 }
