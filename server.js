@@ -1,93 +1,88 @@
+// Setting up port for server, and configuring requirejs
 var port = process.env.PORT || 3000;
-
-var pages = {
-    'huffman': { name: 'huffman',
-                 path: 'lib/visualizations/huffman_page',
-                 description: "Visualize the creation of a Huffman code from character frequencies."
-               }
-    ,'mst': { name: 'mst',
-              path: 'lib/visualizations/mst_page',
-              description: "Side-by-side animations of Prim's and Kruskal's algorithms for building a minimum spanning tree."
-            }
-    ,'tree': { name: 'tree', 
-               path: 'lib/visualizations/tree_page',
-               description: "Comparisons of different algorithms for drawing trees."
-             }
-    ,'life': { name: 'life',
-               path: 'lib/visualizations/cellular_automata/life_page',
-               description: "Simulation of Conway's Game of Life."
-             }
-    ,'ca': { name: 'ca',
-             path: 'lib/visualizations/cellular_automata/automata_page',
-             description: "Simulation of 1d elementary cellular automata."
-           }
-
-    ,'hanoi': { name: 'hanoi',
-                path: 'lib/visualizations/hanoi_page',
-                description: "Animated Towers of Hanoi solver."
-              } 
-
-    ,'dihedral': { name: 'dihedral',
-               path: 'lib/visualizations/groups/group_page',
-               description: "Visualization of the dihedral group of order 8."
-             }
-/*
-    ,'ta_hours': { name: 'ta_hours',
-                   path: 'lib/visualizations/ta_hours_visualization',
-                   description: "Visualization of the integer programming solution to the TA Hours problem"
-                 }
-*/
-}
-
 var requirejs = require('requirejs');
 requirejs.config({
     nodeRequire: require 
 });
 
+// Requiring necessary libraries
 var fs = requirejs('fs');
 var url = requirejs('url');
 var http = requirejs('http');
 var node_static = requirejs('node-static');
 var handlebars = requirejs('handlebars');
 var crossroads = requirejs('crossroads');
+var winston = requirejs('winston');
 var u = requirejs('underscore');
+
+var log_levels = { 
+    levels: {
+        info: 0,
+        page: 1,
+        module: 2,
+        css: 3
+    },
+    colors: {
+        info: 'red',
+        page: 'yellow',
+        module: 'green',
+        css: 'blue'
+    }
+}
+        
+
+// Creating logger
+var logger = new winston.Logger({ levels: log_levels.levels, transports: [ new winston.transports.Console({ level: 'info', colorize: true, timestamp: true }) ] });
+winston.addColors(log_levels.colors);
+
+// The sitemap is contained in 'config.json' which gets parsed into the pages variable
+var pages = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+var links = u.map(pages, function(v, k) { 
+    return u.extend(v, { destination: k });
+});
 
 crossroads.bypassed.add(function(request, response) { response.end("Nothing to see here. Sorry!"); });
 
+// Server used for serving of js modules and css, and other static assets
 var js_server = new node_static.Server('.', { cache: 0 });
 
 var index = fs.readFileSync('index.handlebars', 'utf8');
 var index_template = handlebars.compile(index);
 
+
+// These routes are used for everything but the index
 crossroads.addRoute("", function(request, response) {
-    response.end(index_template({ 'title': 'Visualizations', pages: u.values(pages) }));
+    response.end(index_template({ 'title': "Spencer Gordon's Homepage", pages: u.values(links) }));
 });
 
 crossroads.addRoute("/js/{module*}", function(request, response, module) {
-    console.log(module);
+    logger.module(module);
     js_server.serve(request, response);
 });
 
 crossroads.addRoute(/^\/([a-z]+\.css)/, function(request, response, css) {
-    console.log("CSS file: " + css);
+    logger.css("CSS file: " + css);
     js_server.serve(request, response);
 });
 
 crossroads.addRoute("/{page}", function(request, response, page) { 
-    console.log("Sending " + page + " along the wire!!");
+    logger.page("Sending " + page + " along the wire!!");
     response.end(page_template({ 'title': page, 'page': pages[page] }));
-
 });
 
+// JQuery wrapper for the various visualization pages
 handlebars.registerHelper('run_page_script', function(page) {
     return new handlebars.SafeString(
-        '<script type="text/javascript">require([\'' + page.path + '\'], function(' + page.name + ') { $(document).ready(' + page.name + '); });</script>'
+        '<script type="text/javascript">require([\'' + page.path + '\'], function(' + page.destination + ') { $(document).ready(' + page.destination + '); });</script>'
     );
 });
 
+// Page template
 var page = fs.readFileSync('page.handlebars', 'utf8');
 var page_template = handlebars.compile(page);
 
+
+// The server used for dynamic content
 var server = http.createServer(function(request, response) {
     var req = url.parse(request.url);
     crossroads.parse(req.pathname,[request, response]); 
@@ -95,4 +90,4 @@ var server = http.createServer(function(request, response) {
 
 server.listen(port);
 
-console.log("Listening on port " + port);
+logger.info("Listening on port " + port);

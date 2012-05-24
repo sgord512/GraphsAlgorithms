@@ -5,7 +5,7 @@ define(['lib/utilities', 'deps/under'], function(utilities, underscore) {
     var QuaternionGroup = function() {
         var self = this;
         this.n = 8;
-
+        this.order = 8;
         this.name = "Q"
         this.long_name = "Quaternion Group"
 

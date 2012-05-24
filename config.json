@@ -1,0 +1,42 @@
+{
+    "huffman": { "name": "Huffman Code Visualizations",
+                 "path": "lib/visualizations/huffman_page",
+                 "description": "Visualize the creation of a Huffman code from character frequencies."
+               }
+    ,"mst": { "name": "Prim's and Kruskals Algorithms for MST",
+              "path": "lib/visualizations/mst_page",
+              "description": "side-by-side animations of Prim's and Kruskal's algorithms for building a minimum spanning tree."
+            }
+    ,"tree": { "name": "Comparision of Tree Layout Algorithms", 
+               "path": "lib/visualizations/tree_page",
+               "description": "Comparisons of different algorithms for drawing trees."
+             }
+    ,"life": { "name": "Conway's Game of Life",
+               "path": "lib/visualizations/cellular_automata/life_page",
+               "description": "simulation of Conway's Game of Life."
+             }
+    ,"ca": { "name": "Elementary Cellular Automata",
+             "path": "lib/visualizations/cellular_automata/automata_page",
+             "description": "simulation of 1d elementary cellular automata."
+           }
+
+    ,"hanoi": { "name": "Towers of Hanoi Solver",
+                "path": "lib/visualizations/hanoi_page",
+                "description": "Animated Towers of Hanoi solver."
+              } 
+
+    ,"dihedral": { "name": "Dihedral Group - Cayley Table and Octagons",
+               "path": "lib/visualizations/groups/dihedral_page",
+               "description": "Visualization of the dihedral group on an octagon (order 16)."
+             }
+
+    ,"quaternion": { "name": "Quaternion Group - Cayley Table",
+               "path": "lib/visualizations/groups/quaternion_page",
+               "description": "Visualization of the quaternion group."
+             }
+
+    ,"symmetric": { "name": "symmetric Group - Cayley Table and Permutations",
+               "path": "lib/visualizations/groups/symmetric_page",
+               "description": "Visualization of the symmetric group on 4 elements (order 24)."
+             }
+}

@@ -1,4 +1,4 @@
-define(['deps/under', 'deps/d3', 'lib/miscellaneous/grid', 'lib/algorithms/drawing/tree_algorithms', 'lib/data_structures/binary_tree'], function(underscore, d3, Grid, tree_drawing, bt) {
+define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algorithms/drawing/tree_algorithms', 'lib/data_structures/binary_tree'], function(underscore, d3, Grid, tree_drawing, bt) {
 
     var _ = underscore._;
     var node = bt.node;

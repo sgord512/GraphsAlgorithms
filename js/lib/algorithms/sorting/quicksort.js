@@ -4,9 +4,8 @@ define(["deps/under"], function(underscore) {
 
     return { 
 
-        quicksort: function(arr) { 
+        quicksort: function(arr, compare) { 
             var qs = function(arr) {
-                console.log(arr);
                 if(arr.length <= 1) { return arr; }
                 var pivot_index = Math.floor(Math.random() * arr.length);
                 var pivot = arr[pivot_index];
@@ -15,8 +14,8 @@ define(["deps/under"], function(underscore) {
                 var right = [];
                 var curr;
                 while(curr = arr.shift()) {
-                    if(curr < pivot) { left.unshift(curr); }
-                    else if(curr > pivot) { right.unshift(curr); }
+                    if(compare(curr,pivot) < 0) { left.unshift(curr); }
+                    else if(compare(curr,pivot) > 0) { right.unshift(curr); }
                     else { middle.unshift(curr); }
                 }
                 return qs(left).concat(middle.concat(qs(right)));
@@ -24,7 +23,7 @@ define(["deps/under"], function(underscore) {
             return qs(arr);
         },
 
-        quicksort_in_place: function(arr, step_callback) {
+        quicksort_in_place: function(arr, compare, step_callback) {
             var qs = function(arr, start_index, end_index) {
                 if(end_index <= start_index + 1) { return; }
                 var pivot_index = Math.floor(Math.random() * (end_index - start_index)) + start_index;
@@ -35,18 +34,18 @@ define(["deps/under"], function(underscore) {
                 while(left_index < right_index) {
                     var left_value = arr[left_index];
                     var right_value = arr[right_index];
-                    if(left_value > pivot_value && right_value < pivot_value) {
+                    if(compare(left_value,pivot_value) > 0 && compare(right_value,pivot_value) < 0) {
                         arr[left_index] = right_value;
                         arr[right_index] = left_value;
                         if(step_callback) { step_callback(arr, pivot_index); }
                         left_index++;
                         right_index--;
                     } else {
-                        if(left_value <= pivot_value) { left_index++; }
-                        if(right_value >= pivot_value) { right_index--; }                        
+                        if(compare(left_value,pivot_value) <= 0) { left_index++; }
+                        if(compare(right_value,pivot_value) >= 0) { right_index--; }                        
                     }                    
                 }
-                if(arr[left_index] > pivot_value) {
+                if(compare(arr[left_index],pivot_value) > 0) {
                     arr[end_index - 1] = arr[left_index];
                     arr[left_index] = pivot_value;
                 } else {

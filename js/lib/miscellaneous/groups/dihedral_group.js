@@ -4,7 +4,7 @@ define(['lib/utilities', 'deps/under'], function(utilities, underscore) {
 
     var DihedralGroup = function(n) {
         this.n = n;
-
+        this.order = 2 * n;
         this.name = "D" + (2 * this.n) + "";
         this.long_name = "Dihedral Group of Order 2*" + this.n;
 
@@ -21,11 +21,6 @@ define(['lib/utilities', 'deps/under'], function(utilities, underscore) {
         DihedralGroupElement.prototype.toString = function() {
             if(this.s === 0 && this.r === 0) { return "1"; }
             return (this.s ? "s" : "") + (this.r ? ("r^" + this.r) : "");
-        }
-
-        DihedralGroupElement.prototype.toHTMLString = function() {
-            if(this.s === 0 && this.r === 0) { return "1"; }
-            return (this.s ? "s" : "") + (this.r ? ("r<svg:tspan style=\"baseline-shift: sup;\">" + this.r + "</svg:tspan>") : "");
         }
 
         this.elements = []; 
