@@ -108,4 +108,3 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/groups/dihe
     };
 
 });  
- 

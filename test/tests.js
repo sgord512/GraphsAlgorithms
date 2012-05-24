@@ -77,8 +77,8 @@ describe("Towers of Hanoi Solver", function() {
     var lib = requirejs('lib/miscellaneous/hanoi');
 
     it("Should solve the towers of Hanoi puzzle in the minimum number of moves", function() {
-        (lib.hanoi_solver(3)).should.equal(7);
-        (lib.hanoi_step_solver(3)).should.equal(26);
+        (lib.moves(3)).should.equal(7);
+        (lib.step_moves(3)).should.equal(26);
     });
 
 });
@@ -108,3 +108,19 @@ describe("Queue", function() {
     });
 });
         
+describe("Quicksort", function() { 
+    var lib = requirejs('lib/algorithms/sorting/sorts')();
+    
+    var a = [1,3,2,4,5];
+    var b = [2,4,3,1,5];
+    var c = [5,4,2,1,3];
+    var d = [1,2,3,4,5];
+
+    it("Should sort the provided inputs", function() {
+        lib.quicksort(a).should.eql(d);
+        lib.quicksort(b).should.eql(d);
+        lib.quicksort(c).should.eql(d);
+    });
+
+});
+    

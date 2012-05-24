@@ -1,3 +1,3 @@
-define(['deps/underscore-1.3.1'], function(underscore) {
+define(['deps/underscore-1.3.3'], function(underscore) {
     return underscore;
 });

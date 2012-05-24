@@ -1,4 +1,4 @@
-define(['deps/under', 'deps/d3', 'lib/miscellaneous/grid', 'lib/miscellaneous/life'], function(underscore, d3, Grid, Life) {
+define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/miscellaneous/cellular_automata/life'], function(underscore, d3, Grid, Life) {
 
     var _ = underscore._;
     var d3 = d3;

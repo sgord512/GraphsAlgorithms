@@ -1,6 +1,9 @@
 define(["deps/under", "deps/d3"], function(underscore) {
 
     var _ = underscore._;
+
+    var grid_color = "lightgrey";
+    var grid_stroke_width = 2;
     
     var default_grid_size = 20;
     
@@ -28,8 +31,6 @@ define(["deps/under", "deps/d3"], function(underscore) {
         var x = function(x) { return x * unit_w; };
         var y = function(y) { return y * unit_h; };
 
-
-
         var draw_grid_lines = function(canvas) { 
             var canvas_h = canvas.attr("height");
             var canvas_w = canvas.attr("width");
@@ -48,7 +49,8 @@ define(["deps/under", "deps/d3"], function(underscore) {
                 .attr("x2", function(d) { return d; })
                 .attr("y1", 0 - unit_h)
                 .attr("y2", canvas_h)
-                .style("stroke", "lightgrey");
+                .style("stroke", grid_color)
+                .style("stroke-width", grid_stroke_width);
 
             canvas.append("svg:g").classed("horizontal_lines", true)
                 .selectAll("line")
@@ -59,10 +61,13 @@ define(["deps/under", "deps/d3"], function(underscore) {
                 .attr("y2", function(d) { return d; })
                 .attr("x1", 0 - unit_w)
                 .attr("x2", canvas_w)
-                .style("stroke", "lightgrey");
+                .style("stroke", grid_color)
+                .style("stroke-width", grid_stroke_width);
         }
 
         return {
+            line_width: grid_stroke_width,
+            line_color: grid_color,
             unit: unit,
             w: w,
             h: h,

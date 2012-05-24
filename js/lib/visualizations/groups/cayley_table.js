@@ -11,7 +11,8 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
                 return selection.text(function(d) { return d.value.toString(); }); 
             }
         };
-        var element_color = generate_element_color || function(d) { return d3.hsl((d.value.id / group.n) * 360, 1, 1/2); };
+
+        var element_color = generate_element_color || function(d) { return d3.hsl((d.value.id / group.order) * 360, 1, 1/2); };
 
         var make_display_table = function() {
             var table = group.group_multiplication_table();
@@ -59,7 +60,7 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
                 .enter()
                 .append("svg:text")
                 .attr("x", function(d) { return x(d) + 1; })
-                .attr("y", function(d) { return y(d) - 5; })
+                .attr("y", function(d) { return y(d) - 5 - ((d.x % 2 === 0) ? 13 : 0); })
                 .style("font-family", "sans-serif")
                 .style("text-anchor", "start")
                 .style("alignment-baseline", "top")
