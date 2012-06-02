@@ -1,10 +1,7 @@
 define(['deps/under',
         'lib/utilities',
         'deps/d3',
-        'lib/miscellaneous/graphics_2d/grid',
-        'lib/visualizations/groups/cayley_table',
-        'lib/miscellaneous/groups/quaternion_group'], 
-       function(underscore, utilities, d3, Grid, CayleyTable, QuaternionGroup) {
+       function(underscore, utilities, d3) {
 
            var _ = underscore._;
 
@@ -12,15 +9,16 @@ define(['deps/under',
                
                var h = screen.availHeight - 50;
                var w = screen.availWidth - 50; 
-               
-               var group = new QuaternionGroup();
-               var element_color_quaternion = function(d) { return d3.hsl(((Math.floor(d.value.id / 2) / (group.order / 2)) + d.value.negative) * 180, 1, 1/2); }
 
                var canvas = d3.select("#sketchpad")
                    .append("svg:svg")
                    .attr("height", h)
                    .attr("width", w)
                    .attr("shape-rendering", 'geometricPrecision');
+
+               var point = d3.selectAll("circle")
+                   .data(
+               
                
                var edge = 40;
                var radius = (2 * (group.order + 1) * edge) / 10;

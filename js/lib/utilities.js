@@ -128,5 +128,14 @@ define([], function() {
             return "translate(" + x + "," + y + ") ";
         },
 
+        string_to_array: function(str) {
+            var arr = [];
+            var l = str.length;
+            for(var i = 0; i < l; i++) {
+                arr[i] = str[i];
+            }
+            return arr;
+        }
+
     }
 });

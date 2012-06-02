@@ -5,7 +5,7 @@
                }
     ,"mst": { "name": "Prim's and Kruskals Algorithms for MST",
               "path": "lib/visualizations/mst_page",
-              "description": "side-by-side animations of Prim's and Kruskal's algorithms for building a minimum spanning tree."
+              "description": "Side-by-side animations of Prim's and Kruskal's algorithms for building a minimum spanning tree."
             }
     ,"tree": { "name": "Comparision of Tree Layout Algorithms", 
                "path": "lib/visualizations/tree_page",
@@ -13,11 +13,11 @@
              }
     ,"life": { "name": "Conway's Game of Life",
                "path": "lib/visualizations/cellular_automata/life_page",
-               "description": "simulation of Conway's Game of Life."
+               "description": "Simulation of Conway's Game of Life."
              }
     ,"ca": { "name": "Elementary Cellular Automata",
              "path": "lib/visualizations/cellular_automata/automata_page",
-             "description": "simulation of 1d elementary cellular automata."
+             "description": "Simulation of 1d elementary cellular automata."
            }
 
     ,"hanoi": { "name": "Towers of Hanoi Solver",
@@ -35,8 +35,18 @@
                "description": "Visualization of the quaternion group."
              }
 
-    ,"symmetric": { "name": "symmetric Group - Cayley Table and Permutations",
+    ,"symmetric": { "name": "Symmetric Group - Cayley Table and Permutations",
                "path": "lib/visualizations/groups/symmetric_page",
                "description": "Visualization of the symmetric group on 4 elements (order 24)."
              }
+
+    ,"newtons": { "name": "Newton's Method",
+             "path": "lib/visualizations/newtons_method_page",
+             "description": "Graph of results of iterating Newton's method"
+             }            
+
+    ,"hilbert": { "name": "Hilbert Curve",
+             "path": "lib/visualizations/hilbert_curve_page",
+             "description": "Hilbert Curve"
+             }            
 }
