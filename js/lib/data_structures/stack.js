@@ -20,6 +20,11 @@ define(['lib/utilities', 'deps/under'], function(utilities, underscore) {
         this.next_slot = this.next_slot - 1;
         return popped;
     }
+
+    Stack.prototype.peek = function() {
+        if(this.next_slot === 0) { return undefined; }
+        else return this.arr[this.next_slot - 1];
+    }
     
     Stack.prototype.contents = function() {
         var contents = [];
@@ -27,6 +32,18 @@ define(['lib/utilities', 'deps/under'], function(utilities, underscore) {
             contents[i] = { position: i, value: this.arr[i] };
         }
         return contents;
+    }
+
+    Stack.prototype.height = function() {
+        return this.next_slot; 
+    }
+
+    Stack.clone = function(stack) {
+        var s = new Stack();
+        _.each(stack.contents(), function(pair) {
+            s.push(_.clone(pair.value));
+        });
+        return s;
     }
 
     Stack.prototype.toString = function() {

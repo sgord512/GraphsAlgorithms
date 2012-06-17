@@ -1,4 +1,4 @@
-define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/miscellaneous/cellular_automata/elementary_automata'], function(underscore, d3, Grid, CA) {
+define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/miscellaneous/cellular_automata/elementary_automata', 'lib/utilities/d3_helper'], function(underscore, d3, Grid, CA, d3_helper) {
 
     var _ = underscore._;
     var d3 = d3;
@@ -17,11 +17,7 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/misc
 
         var ca = new CA({ x: cols, rules: 30, mode: 'toroidal', initial_state: 'random' });
 
-        var canvas = d3.select("#sketchpad")
-            .append("svg:svg")
-            .attr("height", h)
-            .attr("width", w)
-            .attr("shape-rendering", 'geometricPrecision');
+        var canvas = d3_helper.create_canvas(w, h);
 
         grid.draw_grid_lines(canvas);
 

@@ -1,4 +1,4 @@
-define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algorithms/drawing/tree_algorithms', 'lib/data_structures/binary_tree'], function(underscore, d3, Grid, tree_drawing, bt) {
+define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algorithms/drawing/tree_algorithms', 'lib/data_structures/binary_tree', 'lib/utilities/d3_helper'], function(underscore, d3, Grid, tree_drawing, bt, d3_helper) {
 
     var _ = underscore._;
     var node = bt.node;
@@ -20,7 +20,7 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algo
 
         var h = screen.height - 10;
         var w = screen.width - 10;
-        var grid = Grid('unbounded', 20);
+        var grid = new Grid('unbounded', 20);
         var r = 8;
         var separator = 20;
 
@@ -28,11 +28,7 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algo
             return "translate(" + x + "," + y + ") ";
         }
 
-        var canvas = d3.select("#sketchpad")
-            .append("svg:svg")
-            .attr("height", h)
-            .attr("width", w)
-            .attr("shape-rendering", 'geometricPrecision');
+        var canvas = d3_helper.create_canvas(w, h);
 
         grid.draw_grid_lines(canvas);
 

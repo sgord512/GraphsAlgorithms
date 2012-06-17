@@ -1,4 +1,6 @@
-define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/miscellaneous/cellular_automata/life', 'lib/utilities/d3_helper'], function(underscore, utilities, d3, Grid, Life, d3_helper) {
+// This is just the life page copied over, I haven't actually got anything working
+
+define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/miscellaneous/cellular_automata/life'], function(underscore, utilities, d3, Grid, Life) {
 
     var _ = underscore._;
     var d3 = d3;
@@ -22,7 +24,11 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
 
         var life = new Life({ x: cols, y: rows, mode: 'toroidal', initial_state: Life.patterns['acorn'] });
 
-        var canvas = d3_helper.create_canvas(w, h);
+        var canvas = d3.select("#sketchpad")
+            .append("svg:svg")
+            .attr("height", h)
+            .attr("width", w)
+            .attr("shape-rendering", 'geometricPrecision');
 
         var g = canvas.append("svg:g").attr("transform", utilities.translation(padding, padding));
 

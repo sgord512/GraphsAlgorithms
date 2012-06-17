@@ -3,8 +3,9 @@ define(['deps/under',
         'deps/d3',
         'lib/miscellaneous/graphics_2d/grid',
         'lib/visualizations/groups/cayley_table',
-        'lib/visualizations/groups/dihedral_presenter'], 
-       function(underscore, utilities, d3, Grid, CayleyTable, DihedralPresenter) {
+        'lib/visualizations/groups/dihedral_presenter',
+        'lib/utilities/d3_helper'], 
+       function(underscore, utilities, d3, Grid, CayleyTable, DihedralPresenter, d3_helper) {
 
            var _ = underscore._;
 
@@ -13,17 +14,13 @@ define(['deps/under',
                var h = screen.availHeight - 50;
                var w = screen.availWidth - 50;
 
-               var canvas = d3.select("#sketchpad")
-                   .append("svg:svg")
-                   .attr("height", h)
-                   .attr("width", w)
-                   .attr("shape-rendering", 'geometricPrecision');
+               var canvas = d3_helper.create_canvas(w, h);
 
                var n = 8;
                var edge = 40;
                var radius = (2 * (n + 1) * edge) / 10;
                var offset = 40;
-               var grid = Grid('unbounded', edge);
+               var grid = new Grid('unbounded', edge);
 
                var dihedral_presentation = DihedralPresenter(n, radius);        
                var element_color = function(d) { return d3.hsl(((d.value.r / dihedral_presentation.group.order) + d.value.s) * 180, 1, 1/2); }

@@ -52,19 +52,30 @@ define(["deps/under", "lib/utilities"], function(underscore, utilities) {
 
     }
 
+    Life.prototype.neighborCount = function(y,x) {
+        var num = 0;
+        num += this.query(y-1,x-1) || 0;
+        num += this.query(y-1,x) || 0;
+        num += this.query(y-1,x+1) || 0;
+        num += this.query(y,x-1) || 0;
+        num += this.query(y,x+1) || 0;
+        num += this.query(y+1,x-1) || 0;
+        num += this.query(y+1,x) || 0;
+        num += this.query(y+1,x+1) || 0;
+        return num;
+    }
+
     var alive = function(curr) { return curr === 1; }
     var dead = function(curr) { return curr === 0; }
 
-    Life.prototype.next_state = function(curr, neighbors) {
-        var living_neighbors = _.filter(neighbors, alive);
-        if(alive(curr)) {
-            if(living_neighbors.length === 2 || living_neighbors.length === 3) { return 1; }
-        } else {
-            if(living_neighbors.length === 3) { return 1; }
-        }
+    Life.prototype.next_state = function(curr, neighborCount) {
+     if(alive(curr)) {
+         if(neighborCount === 2 || neighborCount === 3) { return 1; }
+     } else {
+         if(neighborCount === 3) { return 1; }
+     } 
         return 0;
-    }
-
+    }   
 
     Life.prototype.next_generation = function() {
         var next_generation = []
@@ -72,9 +83,7 @@ define(["deps/under", "lib/utilities"], function(underscore, utilities) {
             next_generation[i] = []
             for(var j = 0; j < this.x; j++) {
                 var cell = this.cells[i][j];
-                next_generation[i][j] = this.next_state(cell,this.neighbors(i,j))
-//                console.log("y: " + i + ", x: " + j + " | " + cell + " -> " + next_generation[i][j]);
-
+                next_generation[i][j] = this.next_state(cell,this.neighborCount(i,j))
             }
         }
 
@@ -89,12 +98,17 @@ define(["deps/under", "lib/utilities"], function(underscore, utilities) {
         });        
     }
 
-    Life.prototype.update = function() {
-        this.cells = this.next_generation();
-        return this.board();
+    Life.prototype.living_cells = function() {
+        var board = this.board();
+        return _.filter(_.flatten(board), function(c) { return c.cell === 1; });
     }
 
-Life.patterns = {
+    Life.prototype.update = function() {
+        this.cells = this.next_generation();
+        return this.living_cells();
+    }
+
+    Life.patterns = {
         'f_pentomino': [[15,15],
                         [14,16],
                         [15,16],
@@ -109,21 +123,21 @@ Life.patterns = {
                     [1,1],
                     [2,1]],
 
-        'acorn': [[24,22],
-                  [22,23],
-                  [24,23],
-                  [23,25],
+        'acorn': [[14,12],
+                  [12,13],
+                  [14,13],
+                  [13,15],
+                  [14,16],
+                  [14,17],
+                  [14,18],
+                  [30,36],
+                  [30,36],
+                  [34,37],
+                  [25,25],
                   [24,26],
-                  [24,27],
-                  [24,28],
-                  [40,46],
-                  [40,46],
-                  [44,47],
-                  [35,35],
-                  [34,36],
-                  [35,36],
-                  [36,36],
-                  [34,37]],
+                  [25,26],
+                  [26,26],
+                  [24,27]],
 
         'gun': [[38,32],
                 [37,34],

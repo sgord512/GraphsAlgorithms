@@ -1,4 +1,4 @@
-define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d/hilbert'], function(underscore, utilities, d3, Hilbert) {
+define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d/hilbert', 'lib/utilities/d3_helper'], function(underscore, utilities, d3, Hilbert, d3_helper) {
 
     var _ = underscore._;
 
@@ -9,7 +9,7 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
         var n_max = 8;
         var color = "black";
         var stroke_width = 2;
-        var step = 1000;
+        var step = 200;
         var padding = 10;
         var size = ((h > w) ? w : h) - (2 * padding);
         var directions = ['N','E','S','W'];
@@ -64,13 +64,8 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
         }
 
         var curves = _.map(_.range(1, n_max + 2), function(n) { return hilbert_curve(n); });
-        
 
-        var canvas = d3.select("#sketchpad")
-            .append("svg:svg")
-            .attr("height", h)
-            .attr("width", w)
-            .attr("shape-rendering", 'geometricPrecision');
+        var canvas = d3_helper.create_canvas(w, h);
 
         var next_n = function() { 
             var ascending = true;

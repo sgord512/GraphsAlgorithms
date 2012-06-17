@@ -1,4 +1,4 @@
-define(['deps/under', 'deps/d3', 'lib/algorithms/greedy/huffman'], function(underscore, d3, Huffman) {
+define(['deps/under', 'deps/d3', 'lib/algorithms/greedy/huffman', 'lib/utilities/d3_helper'], function(underscore, d3, Huffman, d3_helper) {
 
     var _ = underscore._;
     var d3 = d3;
@@ -20,10 +20,7 @@ define(['deps/under', 'deps/d3', 'lib/algorithms/greedy/huffman'], function(unde
             } 
         }
 
-        var canvas = d3.select("#sketchpad")
-            .append("svg:svg")
-            .attr("height", h)
-            .attr("width", w);
+        var canvas = d3_helper.create_canvas(w, h);
         
         var freqs = {  'english': {'e': 12.702
                                    ,'t': 9.056 

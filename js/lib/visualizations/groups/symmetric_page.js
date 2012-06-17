@@ -3,8 +3,9 @@ define(['deps/under',
         'deps/d3',
         'lib/miscellaneous/graphics_2d/grid',
         'lib/visualizations/groups/cayley_table',
-        'lib/visualizations/groups/symmetric_presenter' ], 
-       function(underscore, utilities, d3, Grid, CayleyTable, SymmetricPresenter) {
+        'lib/visualizations/groups/symmetric_presenter', 
+        'lib/utilities/d3_helper'], 
+       function(underscore, utilities, d3, Grid, CayleyTable, SymmetricPresenter, d3_helper) {
 
            var _ = underscore._;
 
@@ -13,14 +14,10 @@ define(['deps/under',
                var h = screen.availHeight - 50;
                var w = screen.availWidth - 50;
 
-               var canvas = d3.select("#sketchpad")
-                   .append("svg:svg")
-                   .attr("height", h)
-                   .attr("width", w)
-                   .attr("shape-rendering", 'geometricPrecision');
+               var canvas = d3_helper.create_canvas(w, h);
                
                var edge = 35;            
-               var grid = Grid('unbounded', edge);
+               var grid = new Grid('unbounded', edge);
                var symmetric_presentation = SymmetricPresenter(4, grid);
                var group = symmetric_presentation.group;
                var radius = ((group.order + 1) * edge) / 10;

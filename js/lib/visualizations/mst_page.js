@@ -1,4 +1,4 @@
-define(['lib/algorithms/graph/random_graph', 'deps/d3', 'lib/algorithms/graph/prim', 'lib/algorithms/graph/kruskal'], function(Graph, d3, prim, kruskal) {
+define(['lib/algorithms/graph/random_graph', 'deps/d3', 'lib/algorithms/graph/prim', 'lib/algorithms/graph/kruskal', 'lib/utilities/d3_helper'], function(Graph, d3, prim, kruskal, d3_helper) {
 
     var d3 = d3;
 
@@ -14,11 +14,7 @@ define(['lib/algorithms/graph/random_graph', 'deps/d3', 'lib/algorithms/graph/pr
         var selected_color = d3.rgb(0, 0, 255);
         var selected_color2 = d3.rgb(255, 0, 0);
 
-        var canvas = d3.select("#sketchpad")
-            .append("svg:svg")
-            .attr("height", h)
-            .attr("width", w);
-        //            .attr("shape-rendering", 'geometricPrecision');
+        var canvas = d3_helper.create_canvas(w, h);
 
         var graph_prim = Graph.initialize({ 'edges_per_vertex': edges_per_vertex
                                             , 'num_vertices': num_vertices
