@@ -11,7 +11,8 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
         var stroke_width = 2;
         var step = 200;
         var padding = 10;
-        var size = ((h > w) ? w : h) - (2 * padding);
+        var canvas_size = ((h > w) ? w : h);
+        var size = canvas_size - 2 * padding
         var directions = ['N','E','S','W'];
 
         var new_direction = function(curr, turnRight) { 
@@ -65,7 +66,8 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
 
         var curves = _.map(_.range(1, n_max + 2), function(n) { return hilbert_curve(n); });
 
-        var canvas = d3_helper.create_canvas(w, h);
+
+        var canvas = d3_helper.create_canvas(canvas_size, canvas_size);
 
         var next_n = function() { 
             var ascending = true;

@@ -24,10 +24,6 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algo
         var r = 8;
         var separator = 20;
 
-        var transform_string = function(x, y) {
-            return "translate(" + x + "," + y + ") ";
-        }
-
         var canvas = d3_helper.create_canvas(w, h);
 
         grid.draw_grid_lines(canvas);
@@ -41,7 +37,7 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algo
             var _draw_tree = function(tree, algorithm, bounds) {
                 var group = canvas
                     .append("svg:g")
-                    .attr("transform", transform_string(bounds.x, bounds.y));
+                    .attr("transform", d3_helper.transforms.translation(bounds.x, bounds.y));
 
                 var nodes = tree_drawing.nodes_in_order(tree);
                 var drawing_algorithm = algorithms[algorithm];

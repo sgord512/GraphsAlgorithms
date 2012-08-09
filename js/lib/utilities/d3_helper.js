@@ -7,6 +7,11 @@ define(['deps/under', 'deps/d3'], function(underscore, d3) {
                 .attr("height", h)
                 .attr("width", w)
                 .attr("shape-rendering", 'geometricPrecision');
+        },
+        transforms: { 
+            translation: function(x, y) {
+                return "translate(" + x + "," + y + ") ";
+            }
         }
     }
 

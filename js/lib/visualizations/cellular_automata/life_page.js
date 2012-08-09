@@ -22,7 +22,7 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
 
         var life = new Life({ x: cols, y: rows, mode: 'toroidal', initial_state: Life.patterns['acorn'] });
 
-        var canvas = d3_helper.create_canvas(w, h);
+        var canvas = d3_helper.create_canvas(grid.w, grid.h);
 
         var g = canvas.append("svg:g").attr("transform", utilities.translation(padding, padding));
 

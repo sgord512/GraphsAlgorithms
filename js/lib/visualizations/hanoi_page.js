@@ -155,7 +155,7 @@ define(['lib/miscellaneous/hanoi', 'deps/d3', 'deps/under', 'lib/utilities', 'li
 
         $("button").after("<select></select>");
         _.each(Hanoi.variants, function(mode, key) { 
-            $("select").append("<option value=\"" + key + "\">" + mode.name + "</select>");
+            $("select").append("<option value=\"" + key + "\">" + mode.name + "</option>");
         });
 
         $("select").change(function(e) { 

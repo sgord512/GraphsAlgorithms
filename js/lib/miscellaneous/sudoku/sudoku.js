@@ -19,58 +19,46 @@ They are used, at least on a first pass, to fill a cell or not. That is all.
 Initially I will have them recomputed every time new data is accumulated.
 
 */
-define(['deps/under', 'lib/utilities'], function(underscore, utilities) {
+define(['deps/under', 'lib/utilities', 'lib/miscellaneous/sudoku/helper'], function(underscore, utilities, sh) {
 
     var _ = underscore._;
 
     var n = 3;
     var num = 9;
+    var nums = function() { return _.range(1, 10); }
 
     var placeholder_code = "\u2B1C";
 
     var Region = function(squares, kind, number) {
         this.kind = kind;
         this.number_of_kind = number;
-        this.unmatched_numbers = _.range(1, num + 1);
-        this.matched_numbers = [];
-        this.unfilled_squares = squares;
-        this.filled_squares = [];
-    }
-
-    Region.prototype.update = function(square) {        
-        var value = square.value;
-        this.filled_squares.push(square);
-        this.unfilled_squares = _.without(this.unfilled_squares, square);
-        this.matched_numbers.push(value);
-        this.unmatched_numbers = _.without(this.unmatched_numbers, value);
-        _.each(this.unfilled_squares, function(square) { 
-            square.possibilities = _.without(square.possibilities, value);
-        });
-    }
-
-    Region.prototype.squares_for_num = function(i) {
-        return _.filter(this.unfilled_squares, function(square) {
-            return _.include(square.possibilities, i);
-        });
+        this.squares = squares;
     }
 
     Region.prototype.solvable_pairs = function() {
-        var self = this;
-        var squares_for_numbers = _.map(this.unmatched_numbers, function(i) {
-            return { number: i, squares: self.squares_for_num(i) };
-        });
-        var solvable_numbers = _.filter(squares_for_numbers, function(v) { return v.squares.length === 1; });
-
-        return _.map(solvable_numbers, function(v, k) {
-            return { square: _.first(v.squares), number: v.number };
-        });
+        var sqs = this.squares;
+        var solvable_numbers = filterProp(nums_w_poss_squares(sqs), 'squares', lone_elem);
+        return _.map(solvable_numbers, function(v) { return { square: _.first(v.squares), number: v.number }; });
     }
+    
+    var filterProp = function(arr, prop, predicate) { return _.filter(arr, function(x) { return predicate(x[prop]); }); };
+    var nums_w_poss_squares = function(sqs) { return assoc_result(unmatched_numbers(sqs), 'number', 'squares', function(x) { return _.filter(sqs, num_possibility(x)); }); }
+    var empty = function(arr) { return arr.length === 0; }
+    var lone_elem = function(arr) { return arr.length === 1; }
+    var num_possibility = function(num) { return function(square) { return _.include(square.possibilities(), num); }; }
+    var assoc_result = function(keyOrig, keyComp, f, arr) { return _.map(arr, function(x) { return { keyOrig: x, keyComp: f(x) }; }); }
+    var unfilled_squares = function(squares) { return _.filter(squares, unfilled); }
+    var filled_squares = function(squares) { return _.filter(squares, filled); }
+    var value = function(square) { return square.value; }
+    var unmatched_numbers = function(squares) { return _.difference(nums(), _.map(filled_squares(squares), value)); }
+    var matched_numbers = function(squares) { return _.map(filled_squares(squares), value); }
+    var unfillable = function(square) { return square.possibilities().length === 0; }
+    var filled = function(square) { return !_.isUndefined(square.value); }
+    var unfilled = function(square) { return _.isUndefined(square.value); }
 
     Region.prototype.unmatchable_numbers = function() {
-        var self = this;
-        return _.filter(this.unmatched_numbers, function(i) {
-            return self.squares_for_num(i).length === 0; 
-        });
+        var sqs = this.squares;
+        return filterProp(nums_w_poss_squares(sqs),  'squares', empty);
     }
 
     Region.prototype.toString = function() {
@@ -88,13 +76,8 @@ define(['deps/under', 'lib/utilities'], function(underscore, utilities) {
 
     var Square = function(y, x) {
         this.value = undefined;
-        this.possibilities = _.range(1, num + 1);
         this.regions = {};
         this.loc = { y: y, x: x };
-    }
-
-    Square.prototype.unfillable = function() { 
-        return !this.value && this.possibilities.length === 0;
     }
 
     Square.prototype.in_region_with_problems = function() {
@@ -103,50 +86,23 @@ define(['deps/under', 'lib/utilities'], function(underscore, utilities) {
         });
     }
 
-    Square.prototype.fill = function(v) { 
-        this.value = v;
-        console.log(this.toString() + "\n");
-    }
-
-    Square.prototype.toLocString = function() {
-        return "(" + this.loc.y + "," + this.loc.x + ")"
-    }
-
-    Square.prototype.toString = function() { 
-        return this.toLocString() + ": " + (this.value || placeholder_code);
-    }
+    Square.prototype.fill = function(v) { this.value = v; }
+    Square.prototype.toLocString = function() { return "(" + this.loc.y + "," + this.loc.x + ")"; }
+    Square.prototype.toString = function() { return this.toLocString() + ": " + (this.value || placeholder_code); }
 
     var Sudoku = function() {
-        var board = _.map(_.range(0, num), function(i) { 
-            return _.map(_.range(0, num), function(j) { 
-                return new Square(i + 1, j + 1);
+        var board = _.map(nums(), function(i) { 
+            return _.map(nums(), function(j) { 
+                return new Square(i, j);
             });
         });
+
+        var boxes = _.map(sh.boardBoxes(board), fromRegionData);
+        var cols = _.map(sh.boardCols(board), fromRegionData);
+        var rows = _.map(sh.boardRows(board), fromRegionData);
         
         var all_squares = _.flatten(board.slice());
 
-        var boxes = [];
-        for(var i = 0; i < n; i++) {
-            for(var j = 0; j < n; j++) {
-                var squares = _.flatten(_.map(_.range(0, n), function(y) {
-                    return _.map(_.range(0, n), function(x) {
-                        return board[i * n + y][j * n + x];
-                    });
-                }));
-                boxes.push(new Region(squares, 'box', i * 3 + j + 1));
-            }
-        }
-
-        var cols = _.map(_.range(1, num + 1), function(x) { 
-            var squares = getCol(board, x);
-            return new Region(squares, 'col', x);
-        });
-
-        var rows = _.map(_.range(1, num + 1), function(y) { 
-            var squares = getRow(board, y);
-            return new Region(squares, 'row', y);
-        });
-                                
         _.each(all_squares, function(square) { 
             square.regions['row'] = rows[square.loc.y - 1];
             square.regions['col'] = cols[square.loc.x - 1];
@@ -154,10 +110,8 @@ define(['deps/under', 'lib/utilities'], function(underscore, utilities) {
         });
 
         this.board = board;
-        this.unfilled_squares = all_squares;
-        this.filled_squares = [];
-        this.solvable_pairs = [];
-        this.last_filled_square = undefined;
+        this.all_squares = all_squares;
+        this.history = [];
         this.regions = boxes.concat(cols, rows);
     }
 
@@ -196,24 +150,14 @@ define(['deps/under', 'lib/utilities'], function(underscore, utilities) {
         return str;
     }
 
-    Sudoku.prototype.update_regions_for_square = function(square) {
-        _.each(square.regions, function(v) { 
-            v.update(square);
-        });
-    }
-        
     Sudoku.prototype.randomly_fill_square = function() {
-        var square = utilities.random_element(this.unfilled_squares);
-        var value = utilities.random_element(square.possibilities);
+        var square = utilities.random_element(_.filter(this.all_squares, unfilled));
+        var value = utilities.random_element(square.possibilities());
         console.log("Randomly filling a square\n");
         square.fill(value);
+        this.history.push(square);
         return square;
     }    
-
-    Sudoku.prototype.mark_square_as_filled = function(square) {
-        this.unfilled_squares = _.without(this.unfilled_squares, square);
-        this.filled_squares.push(square);
-    }
 
     Sudoku.prototype.fill_next_square = function(queue) {
         var square;
@@ -227,10 +171,6 @@ define(['deps/under', 'lib/utilities'], function(underscore, utilities) {
             if(!square.value) { return false; }
         } else return false;
                    
-        this.mark_square_as_filled(square);
-        this.last_filled_square = square;
-        this.update_regions_for_square(square);
-        
         var solvable_queue = _.reduce(this.regions, function(queue, region) { 
             return queue.concat(region.solvable_pairs());
         }, []);
@@ -249,7 +189,7 @@ define(['deps/under', 'lib/utilities'], function(underscore, utilities) {
         return solutions_string;
     }
 
-    Sudoku.prototype.problems = function() {
+    Sudoku.prototype.problems = function(queue) {
         var unfillable_squares = _.filter(this.unfilled_squares, function(square) {
             return square.unfillable();
         });
@@ -265,10 +205,10 @@ define(['deps/under', 'lib/utilities'], function(underscore, utilities) {
 
     Sudoku.prototype.fill_board = function() {
         var queue = this.fill_next_square([]);
-        var problems = this.problems();
+        var problems = this.problems(queue);
         while(queue && problems.length === 0) {
             queue = this.fill_next_square(queue);
-            problems = this.problems()
+            problems = this.problems(queue)
             this.print();
         }
         if(this.unfilled_squares.length > 0) {
@@ -285,42 +225,6 @@ define(['deps/under', 'lib/utilities'], function(underscore, utilities) {
                 return "Region \033[34m" + problem.region.toString() + "\033[37m can't match the following numbers: " + problem.unmatchable_numbers.join(", ");
             }
         }).join("\n");
-    }
-
-    Sudoku.prototype.getSquare = function(y, x) { 
-        return this.board[y - 1][x - 1];
-    }
-
-    Sudoku.prototype.getNumberInBox = function(y, x) { 
-        var r = y % 3;
-        var c = x % 3;
-        return r * 3 + c + 1;
-    }
-
-    Sudoku.prototype.getRow = function(y) { return getRow(this.board, y); }
-
-    Sudoku.prototype.getCol = function(x) { return getCol(this.board, x); }
-
-    Sudoku.prototype.getBox = function(y, x) { return getBox(this.board, y, x); }
-    
-    var getRow = function(board, y) { 
-        return board[y - 1].slice();
-    }
-
-    var getCol = function(board, x) { 
-        return _.map(board, function(row) { return row[x - 1]; });
-    }
-
-    var getBox = function(board, y, x) {
-        var i = Math.floor((y - 1) / 3);
-        var j = Math.floor((x - 1) / 3);
-        var arr = new Array(num);
-        for(var row = i * 3; row < (i + 1) * 3; row++) {
-            for(var col = j * 3; col < (j + 1) * 3; col++) {
-                arr[(row % 3) * 3 + (col % 3)] = board[row][col]; 
-            }
-        }
-        return arr;
     }
 
     Sudoku.prototype.print = function() {

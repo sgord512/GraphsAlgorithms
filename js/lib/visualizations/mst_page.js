@@ -107,7 +107,6 @@ define(['lib/algorithms/graph/random_graph', 'deps/d3', 'lib/algorithms/graph/pr
 
             return group;
         }
-
         
         graph_kruskal.canvas = draw(graph_kruskal);
         var offset = scale_x(separator_factor + scaling_factor)(w);

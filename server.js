@@ -6,14 +6,14 @@ requirejs.config({
 });
 
 // Requiring necessary libraries
-var fs = requirejs('fs');
-var url = requirejs('url');
-var http = requirejs('http');
-var node_static = requirejs('node-static');
-var handlebars = requirejs('handlebars');
-var crossroads = requirejs('crossroads');
-var winston = requirejs('winston');
-var u = requirejs('underscore');
+var fs = require('fs');
+var url = require('url');
+var http = require('http');
+var node_static = require('node-static');
+var handlebars = require('handlebars');
+var crossroads = require('crossroads');
+var winston = require('winston');
+var u = require('underscore');
 
 var log_levels = { 
     levels: {
@@ -30,7 +30,6 @@ var log_levels = {
     }
 }
         
-
 // Creating logger
 var logger = new winston.Logger({ levels: log_levels.levels, transports: [ new winston.transports.Console({ level: 'info', colorize: true, timestamp: true }) ] });
 winston.addColors(log_levels.colors);

@@ -12,5 +12,5 @@ a:not(:hover) {
 
 svg {
     margin: 10px;
-    border: solid 1px #ccc;
+    border: solid 1px #ccc; 
 }
