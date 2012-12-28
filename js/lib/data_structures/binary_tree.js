@@ -33,7 +33,21 @@ define(['lib/utilities', 'deps/under'], function(utilities, underscore) {
 
         is_leaf: function() { 
             return _.isUndefined(this.left) && _.isUndefined(this.right);
+        },
+
+        tree_map: function(f) { 
+            var new_left;
+            if(!_.isUndefined(this.left)) { new_left = this.left.tree_map(f); }
+            var new_right;
+            if(!_.isUndefined(this.right)) { new_right = this.right.tree_map(f); }
+            var new_this = f(this);
+
+            new_this.left = new_left;
+            new_this.right = new_right;
+            
+            return new_this;
         }
+
     }
 
     var nodes_in_order = function(node) {

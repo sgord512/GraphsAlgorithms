@@ -1,4 +1,4 @@
-define(["deps/under", "deps/d3"], function(underscore) {
+define(["deps/under", "deps/d3"], function(underscore, d3) {
 
     var _ = underscore._;
 

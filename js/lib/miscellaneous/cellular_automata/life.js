@@ -119,9 +119,9 @@ define(["deps/under", "lib/utilities"], function(underscore, utilities) {
                         [35,36],
                         [36,36],
                         [34,37]],
-        'blinker': [[0,1],
-                    [1,1],
-                    [2,1]],
+        'blinker': [[10,11],
+                    [11,11],
+                    [12,11]],
 
         'acorn': [[14,12],
                   [12,13],

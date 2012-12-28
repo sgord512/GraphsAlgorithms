@@ -19,12 +19,14 @@ var log_levels = {
     levels: {
         info: 0,
         page: 1,
+        note: 1,
         module: 2,
         css: 3
     },
     colors: {
         info: 'red',
         page: 'yellow',
+        note: 'cyan',
         module: 'green',
         css: 'blue'
     }
@@ -54,6 +56,7 @@ crossroads.addRoute("", function(request, response) {
     response.end(index_template({ 'title': "Spencer Gordon's Homepage", pages: u.values(links) }));
 });
 
+
 crossroads.addRoute("/js/{module*}", function(request, response, module) {
     logger.module(module);
     js_server.serve(request, response);
@@ -62,6 +65,15 @@ crossroads.addRoute("/js/{module*}", function(request, response, module) {
 crossroads.addRoute(/^\/([a-z]+\.css)/, function(request, response, css) {
     logger.css("CSS file: " + css);
     js_server.serve(request, response);
+});
+
+crossroads.addRoute("/notes/{note}", function(request, response, note) {
+    logger.note("Note: " + note);
+    js_server.serve(request, response, function (e, res) {
+        if (e && (e.status === 404)) { // If the file wasn't found
+            js_server.serveFile('/not-found.html', 404, {}, request, response);
+        }
+    });
 });
 
 crossroads.addRoute("/{page}", function(request, response, page) { 
@@ -80,6 +92,8 @@ handlebars.registerHelper('run_page_script', function(page) {
 var page = fs.readFileSync('page.handlebars', 'utf8');
 var page_template = handlebars.compile(page);
 
+var note = fs.readFileSync('note.handlebars', 'utf8');
+var note_template = handlebars.compile(page);
 
 // The server used for dynamic content
 var server = http.createServer(function(request, response) {

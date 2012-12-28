@@ -9,6 +9,8 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
     var step = 50;
     var padding = 0;
 
+    var default_pattern = 'acorn';
+
     return function() { 
 
         var rows = Math.floor(h / unit_size);
@@ -20,7 +22,7 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
 
         var key = function(d) { return "x" + d.x + "y" + d.y; };
 
-        var life = new Life({ x: cols, y: rows, mode: 'toroidal', initial_state: Life.patterns['acorn'] });
+        var life = new Life({ x: cols, y: rows, mode: 'toroidal', initial_state: Life.patterns[default_pattern] });
 
         var canvas = d3_helper.create_canvas(grid.w, grid.h);
 
@@ -48,7 +50,21 @@ define(['deps/under', 'lib/utilities', 'deps/d3', 'lib/miscellaneous/graphics_2d
         setInterval(function() {
             draw(life.update());
         }, step);
-        
+
+        $("header").after("<p>Starting configuration: </p>");
+
+        $("p").append("<select></select>");
+        _.each(Life.patterns, function(pattern, pattern_name) { 
+            $("select").append("<option value=\"" + pattern_name + "\"" + ((pattern_name === default_pattern) ? " selected" : "") + ">" + pattern_name + "</option>");
+        });
+
+        $("p").append("<button type=\"button\">Go</button>");
+
+        $("button")
+            .click(function(e) { 
+                var pattern = $("select option:selected").attr("value");
+                life = new Life({ x: cols, y: rows, mode: 'toroidal', initial_state: Life.patterns[pattern] });
+            });
     };
 
 });

@@ -1,11 +1,17 @@
-define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algorithms/drawing/tree_algorithms', 'lib/data_structures/binary_tree', 'lib/utilities/d3_helper'], function(underscore, d3, Grid, tree_drawing, bt, d3_helper) {
+define(['deps/under', 'deps/d3',
+        'lib/miscellaneous/graphics_2d/grid',
+        'lib/algorithms/drawing/tree_algorithms',
+        'lib/data_structures/binary_tree',
+        'lib/utilities/d3_helper'],
+       function(underscore, d3, Grid, tree_drawing, bt, d3_helper) {
 
     var _ = underscore._;
     var node = bt.node;
-
+    var algorithms = tree_drawing.algorithms;
     var algorithm_to_color_map = { 'knuth_layered_wide': 'red',
                                    'minimum_width': 'green',
-                                   'third_algorithm': 'blue'
+                                   'third_algorithm': 'blue',
+                                   'tilford_reingold': 'purple'
                                  };
 
     var examples = {
@@ -28,16 +34,16 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algo
 
         grid.draw_grid_lines(canvas);
 
-        var draw_tree = (function() {
-            
-            var algorithms = tree_drawing.algorithms;
+        var level_y_coord = 0;
 
-            var bounds = { x: 0, y: 0 };
-            
-            var _draw_tree = function(tree, algorithm, bounds) {
+        var draw_side_by_side_tree_layouts = function(tree) {            
+
+            var current_x_coord = 0;
+
+            var draw_tree_with_algorithm = function(algorithm) { 
                 var group = canvas
                     .append("svg:g")
-                    .attr("transform", d3_helper.transforms.translation(bounds.x, bounds.y));
+                    .attr("transform", d3_helper.transforms.translation(current_x_coord, level_y_coord));
 
                 var nodes = tree_drawing.nodes_in_order(tree);
                 var drawing_algorithm = algorithms[algorithm];
@@ -47,9 +53,9 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algo
                 var lookup = function(d) { return grid.coord_rect_middle(table[d.id]); };
                 var node_coords = _.map(nodes, lookup);
                 var xs = _.pluck(node_coords, 'x');
-                var ys = _.pluck(node_coords, 'y');
-                var tree_bounds = { x: _.max(xs) + grid.unit / 2, y: _.max(ys) + grid.unit / 2 };
-                _draw_tree.bounds = tree_bounds;
+                var tree_width = _.max(xs) + grid.unit / 2;
+
+                current_x_coord = current_x_coord + tree_width + grid.unit;
                 
                 var parents = _.reject(nodes, function(d) { return d.is_leaf(); });
                 var edges = _.flatten(_.map(parents, function(d) { 
@@ -59,7 +65,6 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algo
                     return e;
                 }));
                 var edge_coords = _.map(edges, function(d) { return {start: lookup(d.start), end: lookup(d.end) }; });
-
 
                 group.selectAll("circle")
                     .data(node_coords)
@@ -80,19 +85,14 @@ define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/algo
                     .attr("y2", function(d) { return d.end.y; })
                     .style("stroke-width", 2)
                     .style("stroke", color);
-            }
-            return _draw_tree;
-        }());
+            };
 
-        var bounds = { x: 0, y: 0 };
-        _.each(examples, function(tree) {
-            draw_tree(tree, 'knuth_layered_wide', { x: 0, y: bounds.y });
-            var first_bounds = { x: draw_tree.bounds.x, y: bounds.y };
-            draw_tree(tree, 'minimum_width', first_bounds);
-            var second_bounds = { x: draw_tree.bounds.x + first_bounds.x, y: bounds.y };
-            draw_tree(tree, 'third_algorithm', second_bounds);
-            bounds.y = draw_tree.bounds.y + bounds.y + separator;
-        });
+            _.each(_.keys(algorithms), draw_tree_with_algorithm);
+
+            level_y_coord = level_y_coord + ((tree.height() + 2) * grid.unit);
+        };
+
+        _.each(examples, draw_side_by_side_tree_layouts);
 
     };
 
