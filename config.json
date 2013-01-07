@@ -40,9 +40,10 @@
                "description": "Visualization of the symmetric group on 4 elements (order 24)."
              }
 
-    ,"newtons": { "name": "Newton's Method",
-             "path": "lib/visualizations/newtons_method_page",
-             "description": "Graph of results of iterating Newton's method"
+    ,"turing": { "name": "Turing Machine",
+             "path": "lib/visualizations/turing_machine/turing_page",
+             "description": "Turing Machine Simulator",
+             "coffee": true
              }            
 
     ,"hilbert": { "name": "Hilbert Curve",

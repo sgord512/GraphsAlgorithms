@@ -1,4 +1,8 @@
-define(['deps/under', 'deps/d3', 'lib/miscellaneous/graphics_2d/grid', 'lib/miscellaneous/cellular_automata/elementary_automata', 'lib/utilities/d3_helper'], function(underscore, d3, Grid, CA, d3_helper) {
+define(['deps/under',
+        'deps/d3',
+        'lib/miscellaneous/graphics_2d/grid',
+        'lib/miscellaneous/cellular_automata/elementary_automata',
+        'lib/utilities/d3_helper'], function(underscore, d3, Grid, CA, d3_helper) {
 
     var _ = underscore._;
     var d3 = d3;

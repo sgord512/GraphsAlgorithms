@@ -4,7 +4,15 @@
 <link rel="stylesheet" type="text/css" href="base.css">
 <script type="text/javascript" src="js/deps/jquery-1.8.3.js"></script>
 <script type="text/javascript" src="js/deps/require-2.1.2.js"></script>
-<script type="text/javascript">require.config({ 'baseUrl': "js" });</script>
+<script type="text/javascript">
+
+
+require.config({ baseUrl: "js",
+                 paths: { 'coffee-script' : 'deps/coffee-script',
+                          'cs' : 'cs'
+                        }
+});
+</script>
 {{#if page}}{{run_page_script page}}{{/if}}
 </head>
 <body>

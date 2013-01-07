@@ -2,7 +2,11 @@
 var port = process.env.PORT || 3000;
 var requirejs = require('requirejs');
 requirejs.config({
-    nodeRequire: require 
+    nodeRequire: require,    
+    paths: { 'coffee-script' : 'js/deps/coffee-script',
+             'cs' : 'js/cs'
+           }
+
 });
 
 // Requiring necessary libraries
@@ -31,7 +35,7 @@ var log_levels = {
         css: 'blue'
     }
 }
-        
+ 
 // Creating logger
 var logger = new winston.Logger({ levels: log_levels.levels, transports: [ new winston.transports.Console({ level: 'info', colorize: true, timestamp: true }) ] });
 winston.addColors(log_levels.colors);
@@ -53,7 +57,8 @@ var index_template = handlebars.compile(index);
 
 // These routes are used for everything but the index
 crossroads.addRoute("", function(request, response) {
-    response.end(index_template({ 'title': "Spencer Gordon's Homepage", pages: u.values(links) }));
+    response.end(index_template({ 'title': "Spencer Gordon's Homepage",
+                                  pages: u.values(links) }));
 });
 
 
@@ -84,7 +89,13 @@ crossroads.addRoute("/{page}", function(request, response, page) {
 // JQuery wrapper for the various visualization pages
 handlebars.registerHelper('run_page_script', function(page) {
     return new handlebars.SafeString(
-        '<script type="text/javascript">require([\'' + page.path + '\'], function(' + page.destination + ') { $(document).ready(' + page.destination + '); });</script>'
+        '<script type="text/javascript">require([\''
+            + (page.coffee ? "cs!" : "")
+            + page.path
+            + '\'], function('
+            + page.destination
+            + ') { $(document).ready('
+            + page.destination + '); });</script>'
     );
 });
 
