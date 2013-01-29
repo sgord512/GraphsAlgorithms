@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['deps/under', 'cs!lib/miscellaneous/turing_machine'], function(underscore, TM) {
+  define(['deps/under', 'cs!lib/miscellaneous/turing_machine', 'cs!lib/visualizations/turing_machine/turing_builder'], function(underscore, TM, builder) {
     var Any, Pre, Spec, actionString, alphabetString, exported_names, orNothingRef, orWildcardRef, parseAlphabet, parseRule, parseStates, parseTM, ref, stateSetString, stateString, symbolString, _;
     _ = underscore._;
     Pre = (function() {
@@ -98,18 +98,16 @@
       return _results;
     };
     parseRule = function(text) {
-      var results, ruleRegExp;
+      var results, rule, ruleRegExp;
       ruleRegExp = orWildcardRef(symbolString).concat("\\s*:\\s*").concat(orWildcardRef(stateString)).concat("\\s*->\\s*").concat(ref(actionString)).concat("\\s*;\\s*").concat(orNothingRef(stateString));
       results = text.match(new RegExp(ruleRegExp));
       if ((results != null ? results.length : void 0) >= 5) {
-        return {
+        rule = {
           state: Pre.create(results[1], TM.State),
           symbol: Pre.create(results[2], TM.Symbol),
-          delta: {
-            action: TM.Action.create(results[3]),
-            nextState: TM.State.create(results[4])
-          }
+          delta: new TM.Delta(TM.Action.create(results[3]), TM.State.create(results[4]))
         };
+        return new builder.Rule(rule.state, rule.symbol, rule.delta);
       } else {
         return void 0;
       }
@@ -132,7 +130,7 @@
       return {
         alphabet: alphabet,
         states: stateSet,
-        rules: rules
+        rules: _.compact(rules)
       };
     };
     exported_names = {

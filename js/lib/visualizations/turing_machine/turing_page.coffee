@@ -86,15 +86,53 @@ define(['deps/under',
       sliced_ls.reverse()
       { tape: sliced_ls.concat(curr).concat(sliced_rs), moved: moved }
         
-    () -> 
+    () ->
 
-      canvas = d3_helper.create_canvas(w, h)
-      canvas.style("background-color", 'black')
-      container = canvas.append("svg:g").classed("container", true)
-      container.append("svg:g").classed("tape", true)
-      container.append("svg:g").classed("head", true)
-      container.append("svg:g").classed("rules", true)
+      $.valHooks.textarea =
+        get: (elem) -> 
+          elem.value.replace( /\r?\n/g, "\r\n" )
 
+      $("#sketchpad").replaceWith("<div id=\"tm\"></div>")
+      $("#tm").append("<div id=\"simulator\"></div>", "<div id=\"rules-visualized\"></div>", "<div id=\"rules-text\"></div>")
+      $("#tm > #rules-visualized").css("float", 'left')
+      $("#tm > #rules-text").css("float", 'left')
+      $("#tm > #rules-text").append("<textarea id=\"start-state-and-tape\"></textarea>")
+      $("#tm > #rules-text").append("<textarea id=\"rule_spec\"></textarea>")
+
+      $("#tm > #rules-text > #start-state-and-tape").val(tm_helper.starting_tm_input_string)
+      $("#tm > #rules-text > #start-state-and-tape").css(
+        "margin": "1px"
+        "font-size": "2em"
+        "resize": "none"
+        "outline": "none"
+        "float": "left"
+      )
+
+      $("#tm > #rules-text > #rule_spec").val(tm_helper.starting_tm_program_string)
+      $("#tm > #rules-text > #rule_spec").css(
+        "margin": "1px"
+        "font-size": "2em"
+        "resize": "none"
+        "outline": "none"
+        "clear": "left"
+      )
+
+      simulator_svg = d3.select("#tm > #simulator").append("svg:svg")
+       .attr("id", 'simulator-svg')
+       .attr("width", w)
+       .attr("height", 2 * unit + spacing)
+       .style("background-color", 'black')
+       .style("margin", '0px')
+      
+      simulator_svg.append("svg:g").classed("tape", true)
+      simulator_svg.append("svg:g").classed("head", true)
+      
+      rules_svg = d3.select("#tm > #rules-visualized").append("svg:svg")
+       .attr("id",'rules-svg')
+       .attr("width", unit * 4)      
+       .style("background-color", 'black')
+       .style("margin", '0px')
+  
       sq_translation = (offset) ->
         d3_helper.transforms.translation(offset * unit + center_square_nw_corner.x, center_square_nw_corner.y)
 
@@ -122,14 +160,6 @@ define(['deps/under',
          .attr("x", spacing)
          .attr("fill", 'orange')
          .text(symbol)
-
-      # version used in drawing rules
-      tape_square_symbol_write = (g, symbol) ->
-        g.append("svg:text")
-         .attr("y", square_side - spacing)
-         .attr("x", spacing)
-         .attr("fill", 'lightcoral')
-         .text(symbol)
         
       # version used in drawing rules
       machine_head_small = (g, state) ->
@@ -141,7 +171,6 @@ define(['deps/under',
          .attr("x", square_side / 2 - spacing - 3)
          .attr("fill", 'darkmagenta')
          .text(state)
-        
       machine_head = (g, state) ->
         g.append("svg:polygon")
          .attr("points", d3_helper.polygon(triangle))
@@ -152,8 +181,9 @@ define(['deps/under',
          .attr("fill", 'darkmagenta')
          .text(state)
 
-      # draws appropriate graphic for each type of action
+      # draws appropriate icon for each type of action
       rule_action = (g) ->
+        # action graphic
         g.append("svg:polygon")
          .attr("points", (d) ->
           tm_helper.action_spec(d).polygon.points)
@@ -161,7 +191,7 @@ define(['deps/under',
           tm_helper.action_spec(d).polygon.fill)
          .attr("visibility", (d) ->
           tm_helper.action_spec(d).polygon.visibility)
-
+        # action text
         g.append("svg:text")
          .attr("x", (d) ->
           tm_helper.action_spec(d).text.x)
@@ -174,40 +204,36 @@ define(['deps/under',
          .attr("visibility", (d) ->
           tm_helper.action_spec(d).text.visibility)
 
+      # actually draws each of the rules
       draw_rules = (program) ->
-        rules = tm_helper.setup_rules(program)
-        rules_g = container.select("g.rules")
+        rules = _.reject(tm_helper.setup_rules(program), (rule) -> rule.state.halt())
+        rules_g = rules_svg.attr("height", String((2 * spacing) + (2 * unit * rules.length)).concat("px"))
         rule = rules_g.selectAll("g.rule").data(rules)
         rule_e = rule.enter()
-          .append("svg:g")
-          .classed("rule", true)
-          .attr("transform", (d, i) ->
-            d3_helper.transforms.translation(spacing, (2 * unit) * (i + 1)))
-            
+         .append("svg:g")
+         .classed("rule", true)
+         .attr("transform", (d, i) ->
+           d3_helper.transforms.translation(spacing, spacing + (2 * unit * i)))
         # state
         state_e = rule_e
-          .append("svg:g")
-          .classed("state", true)
-          .attr("transform", d3_helper.transforms.translation(0, unit))
-        machine_head_small(state_e, (d) ->
-          d.state.show())
-
+         .append("svg:g")
+         .classed("state", true)
+         .attr("transform", d3_helper.transforms.translation(0, unit))
+        machine_head_small(state_e, (d) -> d.state.show())
         # symbol
         symbol_e = rule_e
-          .append("svg:g")
-          .classed("symbol", true)
-          .attr("transform", d3_helper.transforms.translation(0, spacing))
+         .append("svg:g")
+         .classed("symbol", true)
+         .attr("transform", d3_helper.transforms.translation(0, spacing))
         tape_square(symbol_e)
         tape_square_symbol(symbol_e, (d) ->
           if d.symbol.blank() then "" else d.symbol.show())
-
         # delta.action 
         action_e = rule_e
-          .append("svg:g")
-          .classed("action", true)
-          .attr("transform", d3_helper.transforms.translation(unit, spacing))
+         .append("svg:g")
+         .classed("action", true)
+         .attr("transform", d3_helper.transforms.translation(unit, spacing))
         rule_action(action_e)          
-
         # delta.nextState
         nextState_e = rule_e
           .append("svg:g")
@@ -216,33 +242,37 @@ define(['deps/under',
         machine_head_small(nextState_e, (d) ->
           d.delta.nextState.show())
 
+        sim_width = $("#tm > #simulator > svg").width()
+        rule_vis_width = $("#tm > #rules-visualized > svg").width()
+        rule_vis_height = $("#tm > #rules-visualized > svg").height()    
+        text_width = sim_width - rule_vis_width - 12
+        start_state_tape_height = $("#tm > #rules-text > #start-state-and-tape").height()
+        $("#tm > #rules-text").width(text_width + 12)
+        $("#tm > #rules-text > textarea").width(text_width)
+        $("#tm > #rules-text > #rule_spec").height(rule_vis_height - start_state_tape_height - 14)
+
       # main function for displaying a tape
       draw_tape = (tape, noTransition) ->
-        tape_g = container.select("g.tape")
+        tape_g = simulator_svg.select("g.tape")
         prepped_tape = setup_tape(tape).tape
         square = tape_g.selectAll("g.square").data(prepped_tape, (d) -> d.num)
-
         # The current selection 
         square
           .select("text")
           .text((d) -> if d.blank() then "" else d.show())
-
         square
           .transition()
           .delay(del)
           .duration(dur)
           .attr("transform", (d) ->
             sq_translation(d.offset))
-
         # The entering selection
         square_e = square.enter()
           .append("svg:g")
           .classed("square", true)
-
         tape_square(square_e)
         tape_square_symbol(square_e, (d) ->
           if d.blank() then "" else d.show())
-
         if noTransition?
           square_e
             .attr("transform", (d) ->
@@ -256,7 +286,6 @@ define(['deps/under',
             .duration(dur)
             .attr("transform", (d) ->
               sq_translation(d.offset))
-        
         # The exiting selection
         square.exit()
           .transition()
@@ -266,17 +295,18 @@ define(['deps/under',
             sq_translation(adjust_exit(d.offset)))
           .remove()
 
+      # INITIALIZATION
       # setup head initially
       initialize_head = (state) ->
-        head_g = container.select("g.head")
+        head_g = simulator_svg.select("g.head")
         head_y = center_square_nw_corner.y + unit
         head_x = center_square_nw_corner.x
         head_g.attr("transform", d3_helper.transforms.translation(head_x,head_y))
         machine_head(head_g, state.show())
 
-      # update state of head
+      # draw tape head with current state
       draw_head = (state) ->
-        container.select("g.head")
+        simulator_svg.select("g.head")
           .select("text")
           .text(state.show())
 
@@ -288,14 +318,11 @@ define(['deps/under',
 
       # body of the page
       tm = tm_helper.tm
-      
       initialize_head(tm.state)
       draw_turing_machine(tm,true)
-
       stepper = () ->
         if not tm.halted()
           tm.step()
           draw_turing_machine(tm)
-
       setInterval(stepper, step)
 )

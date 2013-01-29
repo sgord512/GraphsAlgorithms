@@ -4,7 +4,7 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(["deps/under", "lib/utilities"], function(underscore, utilities) {
-    var Action, B, Erase, H, Halt, Just, Left, LiveState, Maybe, Nothing, Right, State, Sym, Symbol, Tape, TuringMachine, Write, exported_names, _;
+    var Action, B, Delta, Erase, H, Halt, Just, Left, LiveState, Maybe, Nothing, Right, State, Sym, Symbol, Tape, TuringMachine, Write, exported_names, _;
     _ = underscore._;
     Maybe = (function() {
 
@@ -44,6 +44,10 @@
         return false;
       };
 
+      Just.prototype.fromJust = function() {
+        return this.val;
+      };
+
       Just.prototype.fmap = function(f) {
         return new Just(f(this.val));
       };
@@ -65,6 +69,10 @@
         }
       };
 
+      Symbol.prototype.inspect = function(depth) {
+        return this.show();
+      };
+
       return Symbol;
 
     })();
@@ -84,6 +92,14 @@
         return this.sym;
       };
 
+      Sym.prototype.canonical = function() {
+        return this.sym;
+      };
+
+      Sym.prototype.matches = function(s) {
+        return !s.blank() && this.sym === s.sym;
+      };
+
       return Sym;
 
     })(Symbol);
@@ -101,6 +117,14 @@
         return 'B';
       };
 
+      B.prototype.canonical = function() {
+        return 'B';
+      };
+
+      B.prototype.matches = function(s) {
+        return s.blank();
+      };
+
       return B;
 
     })(Symbol);
@@ -111,11 +135,15 @@
       function State() {}
 
       State.create = function(state) {
-        if ((!(state != null)) || (state === 'H')) {
+        if ((!(state != null)) || (state === 'H') || (state === '')) {
           return new H();
         } else {
           return new LiveState(state);
         }
+      };
+
+      State.prototype.inspect = function(depth) {
+        return this.show();
       };
 
       return State;
@@ -137,6 +165,14 @@
         return this.state;
       };
 
+      LiveState.prototype.canonical = function() {
+        return this.state;
+      };
+
+      LiveState.prototype.matches = function(s) {
+        return !s.halt() && this.state === s.state;
+      };
+
       return LiveState;
 
     })(State);
@@ -152,6 +188,14 @@
 
       H.prototype.show = function() {
         return 'H';
+      };
+
+      H.prototype.canonical = function() {
+        return 'H';
+      };
+
+      H.prototype.matches = function(s) {
+        return s.halt();
       };
 
       return H;
@@ -172,32 +216,43 @@
         return this.curr = sym;
       };
 
-      Tape.prototype.left = function() {
+      Tape.prototype.move_left = function() {
         var _ref;
-        this.right.unshift(this.curr);
-        this.curr = (_ref = this.left.shift()) != null ? _ref : new B();
-        return this.index = this.index + 1;
-      };
-
-      Tape.prototype.right = function() {
-        var _ref;
-        this.left.unshift(this.curr);
-        this.curr = (_ref = this.right.shift()) != null ? _ref : new B();
+        this.rightTape.unshift(this.curr);
+        this.curr = (_ref = this.leftTape.shift()) != null ? _ref : new B();
         return this.index = this.index - 1;
       };
 
+      Tape.prototype.move_right = function() {
+        var _ref;
+        this.leftTape.unshift(this.curr);
+        this.curr = (_ref = this.rightTape.shift()) != null ? _ref : new B();
+        return this.index = this.index + 1;
+      };
+
       Tape.prototype.show = function() {
-        var l, ls, rs, sym, _i, _j, _len, _len1;
-        l = this.left.slice(0).reverse();
-        for (_i = 0, _len = l.length; _i < _len; _i++) {
-          sym = l[_i];
-          ls = sym.show();
-        }
-        for (_j = 0, _len1 = r.length; _j < _len1; _j++) {
-          sym = r[_j];
-          rs = sym.show();
-        }
-        return ls.join(' ').concat(this.curr.show()).concat(rs.join(' '));
+        var l, ls, r, rs, sym;
+        l = this.leftTape.slice(0).reverse();
+        r = this.rightTape.slice(0);
+        ls = (function() {
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = l.length; _i < _len; _i++) {
+            sym = l[_i];
+            _results.push(sym.show());
+          }
+          return _results;
+        })();
+        rs = (function() {
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = r.length; _i < _len; _i++) {
+            sym = r[_i];
+            _results.push(sym.show());
+          }
+          return _results;
+        })();
+        return (ls.concat(this.curr.show()).concat(rs)).join(' ');
       };
 
       return Tape;
@@ -208,7 +263,6 @@
       function Action() {}
 
       Action.create = function(str) {
-        console.log(str);
         switch (str) {
           case "E":
             return new Erase();
@@ -225,6 +279,10 @@
               throw "Unknown action";
             }
         }
+      };
+
+      Action.prototype.inspect = function(depth) {
+        return this.show();
       };
 
       return Action;
@@ -322,6 +380,16 @@
     Action.Left = Left;
     Action.Right = Right;
     Action.Halt = Halt;
+    Delta = (function() {
+
+      function Delta(action, nextState) {
+        this.action = action;
+        this.nextState = nextState;
+      }
+
+      return Delta;
+
+    })();
     TuringMachine = (function() {
 
       function TuringMachine(program, state, tape) {
@@ -334,7 +402,7 @@
         if (this.state.halt()) {
           return new Nothing();
         } else {
-          return new Just(this.program[this.state][this.tape.curr]);
+          return new Just(this.program[this.state.canonical()][this.tape.curr.canonical()]);
         }
       };
 
@@ -344,43 +412,49 @@
         this.state = nextState;
         switch (action.type()) {
           case "Erase":
-            this.tape.set_curr(new B());
-            break;
+            return this.tape.set_curr(new B());
           case "Write":
-            this.tape.set_curr(action.sym);
-            break;
+            return this.tape.set_curr(action.sym);
           case "Left":
-            this.tape.left();
-            break;
+            return this.tape.move_left();
           case "Right":
-            this.tape.right();
-            break;
+            return this.tape.move_right();
           case "Halt":
-            this.tape;
+            return this.tape;
         }
-        return {
-          initialize: function(state, initialTape) {
-            this.state = state;
-            return this.tape = new Tape([], initialTape.shift(), initialTape);
-          },
-          halted: function() {
-            return this.state.halt();
-          },
-          step: function() {
-            delta = this.currentDelta();
-            if (!delta.isNothing()) {
-              throw "Can't step from halted state";
-            }
-          },
-          showApplicableRule: function() {
-            var show_rule;
-            show_rule = function(action, nextState) {};
-            return state.show() + ": " + curr.show() + " -> " + action.show() + "; " + nextState.show();
-          },
-          showCurrentTape: function() {
-            return this.curr.show();
-          }
-        };
+      };
+
+      TuringMachine.prototype.initialize = function(state, initialTape) {
+        var curr, left, right, _ref;
+        this.state = state;
+        left = [];
+        curr = (_ref = initialTape.shift()) != null ? _ref : new B();
+        right = initialTape != null ? initialTape : [];
+        return this.tape = new Tape(left, curr, right);
+      };
+
+      TuringMachine.prototype.halted = function() {
+        return this.state.halt();
+      };
+
+      TuringMachine.prototype.step = function() {
+        var delta;
+        delta = this.currentDelta();
+        if (!delta.isNothing()) {
+          return this.applyDelta(delta.fromJust());
+        } else {
+          throw "Can't step from halted state";
+        }
+      };
+
+      TuringMachine.prototype.showApplicableRule = function() {
+        var show_rule;
+        show_rule = function(action, nextState) {};
+        return state.show() + ": " + curr.show() + " -> " + action.show() + "; " + nextState.show();
+      };
+
+      TuringMachine.prototype.showCurrentTape = function() {
+        return this.tape.show();
       };
 
       return TuringMachine;
@@ -388,7 +462,9 @@
     })();
     exported_names = {
       TM: TuringMachine,
+      TuringMachine: TuringMachine,
       Action: Action,
+      Delta: Delta,
       State: State,
       Symbol: Symbol,
       Tape: Tape,

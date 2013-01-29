@@ -23,12 +23,6 @@ define(['deps/under',
     Pre.Any = Any
     Pre.Spec = Spec
 
-    alphabetString = "Alphabet: "
-    stateSetString = "States: "
-    symbolString = "[a-zA-Z][a-zA-Z0-9]*"
-    stateString = "[a-zA-Z][a-zA-Z0-9]*"
-    actionString = "[EHLR]|(?:W\\(".concat(symbolString).concat("\\))")
-
     ref = (text) ->
       "(".concat(text).concat(")")
 
@@ -38,6 +32,37 @@ define(['deps/under',
     orNothingRef = (text) ->
       "((?:".concat(text).concat(")|\\s*)")
     
+    alphabetString = "Alphabet: "
+    stateSetString = "States: "
+    symbolString = "[a-zA-Z][a-zA-Z0-9]*"
+    stateString = "[a-zA-Z][a-zA-Z0-9]*"
+    actionString = "[EHLR]|(?:W\\(".concat(symbolString).concat("\\))")
+    tapePhraseString = "(?:([0-9])\s*\\*)?\s*".concat(ref(symbolString))
+
+    parseTape = (text) ->
+      tapePhrase = new RegExp(tapePhraseString,"g")
+      phrase = tapePhrase.exec(text)
+      tape = []
+      while phrase
+        [str, count, sym] = phrase
+        if count
+          tape.push(TM.Symbol.create(sym)) for n in _.range(0, Number(count))
+        else
+          tape.push(TM.Symbol.create(sym))
+        phrase = tapePhrase.exec(text)
+      tape
+
+    parseInput = (text) ->
+      stateAmpersandRegExp = new RegExp(ref(stateString).concat("\\s*&"))
+      stateResult = stateAmpersandRegExp.exec(text)
+      state = TM.State.create(stateResult[1])
+      tape = parseTape(text.substring(stateResult.index + stateResult[0].length))
+      {
+        state: state
+        tape: tape
+      }
+      
+          
     parseAlphabet = (text) ->
       sym = new RegExp(symbolString,"g")
       textRest = text.substring(text.match(alphabetString).index + alphabetString.length)
@@ -81,6 +106,7 @@ define(['deps/under',
     exported_names =
       Pre: Pre
       parseTM: parseTM
+      parseInput: parseInput
 
     exported_names
 )

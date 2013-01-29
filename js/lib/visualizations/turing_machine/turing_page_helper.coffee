@@ -8,20 +8,27 @@ define(['deps/under',
     _ = underscore._
     d3 = d3
 
-    starting_tm_string = """
+    starting_tm_input_string = "q1 & 4*S1, B, 3*S1"
+    starting_tm_program_string = """
       Alphabet: S1
-      States: q1, q2, q3
-      q1: B  -> W(S1); q1
-      q1: S1 -> L    ; q2
-      q2: B  -> W(S1); q2
-      q2: S1 -> L    ; q3
-      q3: B  -> W(S1); q3
-      q3: S1 -> H    ;
+      States: q1, q2, q3, q4, q5
+      q1: B -> R; q1
+      q1: S1 -> R; q2
+      q2: B -> W(S1); q3
+      q2: S1 -> R; q2
+      q3: B -> L; q4
+      q3: S1 -> R; q3
+      q4: B -> L; q5
+      q4: S1 -> E; q4
+      q5: S1 -> L; q5
+      q5: B -> H;
     """
-    parsed_tm_program = parser.parseTM(starting_tm_string)
+    
+    parsed_tm_program = parser.parseTM(starting_tm_program_string)
     starting_tm_program = builder.builder(parsed_tm_program)
     starting_tm = new TM.TuringMachine(starting_tm_program)
-    starting_tm.initialize(TM.State.create("q1"), [])
+    starting_tm_input = parser.parseInput(starting_tm_input_string)
+    starting_tm.initialize(starting_tm_input.state, starting_tm_input.tape)
 
     tm = starting_tm
 
@@ -59,8 +66,9 @@ define(['deps/under',
       ]
 
       left_arrow = _.map(right_arrow, (point) ->
-        point.x = reflect_over_half(point.x)
-        point)
+        { x: x, y: y } = point
+        flipped_x = reflect_over_half(x)
+        { x: flipped_x, y: y })
 
       halt_sign = [
         { x: 0, y: 0 },
@@ -83,34 +91,6 @@ define(['deps/under',
         { x: square_side, y: square_side },
         { x: 0, y: square_side }
       ]
-
-      tape_square = (g) ->
-        "<rect  " + 
-        "width" + new String(square_side) + "\" " + 
-        "height" + new String(square_side) + "\" " + 
-        "fill" + 'white' + "\" " + 
-        "/>"
-        
-      # version used in drawing rules
-      tape_square_symbol_write = (symbol) ->
-        "<text " +
-        "y=\"" + new String(square_side - spacing) + "\" " + 
-        "x=\"" + new String(spacing) + "\" " + 
-        "fill=\"" + 'lightcoral' + "\" " +
-        ">" + symbol +
-        "</text>"
-      # draws either left or right-facing arrow, respectively, for Right and Left
-      arrow = (facingLeft) ->
-        "<polygon " + 
-        "points=\"" + d3_helper.polygon(if facingLeft then leftArrow else rightArrow) + "\" " +
-        "fill=\"" + 'steelblue' + "\" "
-        "/>"
-      # draws an H if action is Halt
-      halt_action = () ->
-        "<polygon " + 
-        "points=\"" + d3_helper.polygon(halt_sign) + "\" " +
-        "fill=\"" + 'crimson' + "\" " +
-        "/>"
 
       template_spec = () ->
         polygon:
@@ -146,6 +126,8 @@ define(['deps/under',
  
       exported_names =
         tm: tm
+        starting_tm_program_string: starting_tm_program_string
+        starting_tm_input_string: starting_tm_input_string
         setup_rules: setup_rules
         action_spec: action_spec
 
