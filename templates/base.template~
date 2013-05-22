@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html> <head>
-<title>{{ title }}</title>
-<link rel="stylesheet" type="text/css" href="base.css">
+{% block head %}
+{% block title %}
+<title>Spencer Gordon's Homepage</title>
+{% endblock %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='base.css' }}"/>
+{% endblock %}
 </head>
 <body>
 <ul>
-{{#each pages}}<li><a href="/{{this.destination}}">{{this.name}}</a>: {{this.description}}</li>{{/each}}  
+{% for page in pages %}
+<li><a href="/{{page.destination}}">{{page.name}}</a>: {{page.description}}</li>
+{% endfor %}  
 </ul>
 <p> Hey, this is the homepage of Spencer Gordon. I am a junior at
 Brown University, concentrating in Computer Science and Philosophy. I
@@ -22,7 +28,9 @@ href="https://github.com/sgord512/GraphsAlgorithms">github</a>.
 To get in touch with me, email me at <em> spencer gordon at brown dot
 edu</em>, or at <em> sgord512 at gmail dot com </em> </p>
 <div id="sketchpad"></div>
+{% block footer %}
 <address>69 Brown St., Box #3850, Brown University, Providence, RI
 02912 <br>
 spencer gordon at brown dot edu</address>
+{% endblock %}
 </body> </html>

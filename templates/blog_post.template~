@@ -1,0 +1,12 @@
+{% extends "base.template" %}
+{% block title %}Blog Post Index{% endblock %}
+{% block body %}
+<p> Here are all my blog posts ever!! </p>
+<ul>
+{% for post in posts %}
+<li>
+<a href="/{{ post.link }}">{{post.year}} - {{post.month}} - {{post.day}} - {{post.title}}</a>
+</li>
+{% endfor %}  
+</ul>
+{% endblock %}

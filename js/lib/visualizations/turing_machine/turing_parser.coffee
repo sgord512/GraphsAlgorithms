@@ -50,28 +50,38 @@ define(['deps/under',
         else
           tape.push(TM.Symbol.create(sym))
         phrase = tapePhrase.exec(text)
-      tape
+      if tape.length > 0 then tape else undefined
 
     parseInput = (text) ->
       stateAmpersandRegExp = new RegExp(ref(stateString).concat("\\s*&"))
       stateResult = stateAmpersandRegExp.exec(text)
-      state = TM.State.create(stateResult[1])
-      tape = parseTape(text.substring(stateResult.index + stateResult[0].length))
-      {
-        state: state
-        tape: tape
-      }
-      
+      state = TM.State.create(stateResult[1]) if stateResult?
+      tape = parseTape(text.substring(stateResult.index + stateResult[0].length)) if stateResult?
+      input = 
+        {
+          state: state
+          tape: tape
+        }
+
+      if state? and tape? then input else undefined
           
     parseAlphabet = (text) ->
       sym = new RegExp(symbolString,"g")
-      textRest = text.substring(text.match(alphabetString).index + alphabetString.length)
-      (TM.Symbol.create(s) for s in textRest.match(sym))
+      alphabetMatch = text.match(alphabetString)
+      textRest = text.substring(alphabetMatch.index + alphabetString.length) if alphabetMatch?
+
+      if textRest?
+        (TM.Symbol.create(s) for s in textRest.match(sym))
+      else undefined
 
     parseStates = (text) ->
       state = new RegExp(stateString,"g")
-      textRest = text.substring(text.match(stateSetString).index + stateSetString.length)
-      (TM.State.create(s) for s in textRest.match(state))
+      stateSetMatch = text.match(stateSetString)
+      textRest = text.substring(stateSetMatch.index + stateSetString.length) if stateSetMatch?
+
+      if textRest?
+        (TM.State.create(s) for s in textRest.match(state))
+      else undefined
 
     parseRule = (text) ->
       ruleRegExp = orWildcardRef(symbolString)
@@ -96,12 +106,14 @@ define(['deps/under',
       lines = text.split("\n")     
       alphabet = parseAlphabet(lines[0]) ? undefined
       stateSet = parseStates(lines[1]) ? undefined
-      rules = (parseRule(rule) for rule in lines[2..])
-      {
+      rules = (parseRule(rule) for rule in lines[2..]) if alphabet? and stateSet?
+      tm = { 
         alphabet: alphabet
         states: stateSet
         rules: _.compact(rules)
       }
+
+      if alphabet? and stateSet? and rules? then tm else undefined
        
     exported_names =
       Pre: Pre

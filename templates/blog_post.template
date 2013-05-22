@@ -1,0 +1,7 @@
+{% extends "base.template" %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block body %}
+<div id="blog_post">
+{{ post.content|safe }} 
+</div>
+{% endblock %}

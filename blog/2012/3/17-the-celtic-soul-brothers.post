@@ -1,0 +1,15 @@
+Title: The Celtic Soul Brothers
+Status: Publish
+DateGMT: 2012-03-17 21:56:02
+PostName: the-celtic-soul-brothers
+---
+So for fun, I've been working on some animations for algorithms recently.
+
+I've succeeded in getting a couple working and online, and though they're definitely a work-in-progress, I'm happy to present what I have so far:
+
+They are available at: <a title="algorithms" href="http://algorithm.herokuapp.com">algorithm.herokuapp.com</a>. At that page, you will see animations of <a title="Prim's Algorithm" href="http://en.wikipedia.org/wiki/Prim%27s_algorithm">Prim's</a> and<a title="Kruskal's Algorithm" href="http://en.wikipedia.org/wiki/Kruskal%27s_algorithm"> Kruskal's</a> algorithms for finding minimum spanning trees.
+
+If you instead go to <a title="Huffman coding" href="http://algorithm.herokuapp.com/huffman.html">algorithm.herokuapp.com/huffman.html</a> you can see the animation I've made for <a title="Huffman coding" href="http://en.wikipedia.org/wiki/Huffman_coding">Huffman coding</a>. I don't have any explanations of the algorithms at the moment, so it is quite possible that they will make no sense whatsoever, but if you go to wikipedia, it should e possible to get a sense of what is going on. Anyway, check them out, and let me know what you think.
+
+-Spencer
+---

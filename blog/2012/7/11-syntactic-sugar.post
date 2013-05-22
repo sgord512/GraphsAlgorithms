@@ -1,0 +1,24 @@
+Title: Syntactic Sugar
+Status: Publish
+DateGMT: 2012-07-11 14:52:25
+PostName: syntactic-sugar
+---
+So, anyone who's tried learning a couple of different programming languages has undoubtedly been exposed to the phrase "syntactic sugar", and has probably got a rough idea of what it means. Basically, syntactic sugar describes syntactic constructs that are designed solely for convenience, as they do not allow a programmer to express something that would otherwise be impossible to express, but rather they make it easier to write something down. An example:
+
+In ruby, one can write the following:
+<pre>%w[hello my name is spencer]</pre>
+to create an array of strings that is identical to what you would get if you wrote the following instead:
+<pre>["hello","my","name","is","spencer"]</pre>
+The former is just a convenient alternative syntax to make it less cumbersome to write down the latter. That's the essence of syntactic sugar. However, to me that seems insufficiently rigorous, and so I propose a more rigorous definition: For a syntactic construct to be considered syntactic sugar, one has to be able to specify the semantics of the construct by translation into the language in question. In the example above, you can specify the semantics of the former expression in terms of the latter, and show the way in which the former is mechanically translated to the second.
+
+While I think this definition is about right, it raises some interesting questions that need to be answered before I would assert its correctness. How does one determine which of two constructs is syntactic sugar and which is the "real" syntax? Intuitively, it would seem like the syntax that is more general is the real syntax, so that if you have syntax <strong>A</strong> and <strong>B</strong>, it might be the case that you can always translate <strong>A</strong> <strong>-&gt;</strong> <strong>B</strong> and preserve the semantics of the program, but that you can not always translate <strong>B -&gt; A</strong>, and get a valid program, or that if you do get a valid program, it may not have the same behavior as the original.
+
+What got me thinking about this is the claim often made that <strong>do-notation</strong> in Haskell is syntactic sugar (I agree that it is), and the fact that <strong>let and where</strong><strong> </strong>seem to both be possible candidates for that designation as well, yet I don't recall having seen them described in that way. I think the reason that they are not described as such is that they can have drastic effects on program performance as a result of sharing enabled by both constructs. In theory, the following lines are interchangeable:
+<pre>let a = exp in f a + g a
+f exp + g exp</pre>
+However, the first one explicitly signals to the compiler that the arguments to <strong>f</strong> and <strong>g</strong> are the same, and that the expression can be evaluated once, and then its result used twice, while the second one makes this sharing implicit, and requires a compiler to optimize the program to avoid recomputing the expression. Thus, the two differ with respect to program performance, despite being indistinguishable with respect to functional behavior. Because the two are not then identical, it would be incorrect to say that <strong>let </strong>is syntactic sugar, at least if the compiler generates different code for the two examples. I am not sure if the programs actually are functionally equivalent, since it may be the case that they diverge when given bottom as an input, depending on the specification of the functions in question. I could be wrong though, and I welcome any corrections anyone may have.
+
+I have more to say on the topic, but I'll save it for future posts.
+
+-Spencer
+---

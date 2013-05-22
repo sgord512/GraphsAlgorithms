@@ -1,0 +1,10 @@
+{% extends "base.template" %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='base.css') }}">
+{% block title %}
+<title>Page not found</title>
+{% endblock %}
+{% block body %}
+<header><a href="/" rel="author">Spencer Gordon</a>
+
+<br> Sorry, the page you were looking for does not exist!</header>
+{% endblock %}

@@ -1,0 +1,15 @@
+Title: More CS
+Status: Publish
+DateGMT: 2011-05-10 07:44:18
+PostName: more-cs
+---
+<blockquote>Basically, the more you do CS, the more you realize that you are only doing a limited number of truly different things. Like searching, sorting, filtering, traversing, and so on... The number of times you are going to have to do binary search in some list, or that you are going to have to build some kind of linked list, or some growing array is probably dwarfed only by the number of times you are going to have to write nested loops, or getters and setters, or interface with some GUI via event listeners and callbacks and junk. The point is, given that all this stuff exists already, and is known, when you describe the stuff you are programming, you are bound to feel a little silly. And that's ok, because in CS, you do spend a couple years writing stuff that people have written countless times before, stuff which is a google search away, and which has surely been done better, and which is free of the design errors that make your work such a pain.
+
+Ideally, you should never write a piece of code that has been written elsewhere, since you are always trying to minimize the potential for errors, and Java collections are invariably going to get fixed if they are broken, while your linked list can randomly delete links for months without anyone necessarily paying enough attention to do anything about it. 
+
+So why do you write it over again? Well, there are a couple of reasons, which don't really do much to quiet the creeping feeling that you are wasting your time. First, in the writing of the linked list, you gain experience with some programming techniques, in this case recursion, which you need in your toolbox, and you won't be able to write recursive functions well without practice. Second, by implementing methods that you use on a daily basis in an utterly unfamiliar way, you see the true power of API's. It really is a brilliant idea, that implementations don't matter, and that if you simply specify preconditions and postconditions, you can write the rest of the program without having to know or care how the things you are interacting with actually work. 
+
+The whole idea of an API is entirely </blockquote>
+
+This is another draft that will be lost if not published, so here it is...
+---

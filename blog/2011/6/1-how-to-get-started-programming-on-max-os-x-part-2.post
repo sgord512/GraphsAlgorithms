@@ -1,0 +1,57 @@
+Title: How to get Started Programming on Max OS X, Part 2
+Status: Publish
+DateGMT: 2011-06-01 05:20:57
+PostName: how-to-get-started-programming-on-max-os-x-part-2
+---
+If you just got here, start with <a href="/2011/05/30/how-to-get-started-programming-on-mac-os-x/" title="How to get Started Programming on Mac OS X">Part 1</a>.
+
+Ok, so last time I got started explaining what the filesystem looks like when you're in the Terminal application, but I kinda forgot to explain what exactly the terminal is. The window that you have open is called a terminal window, and it is currently running a shell: In this case, the shell is Bash. What is a shell? A shell is an interface with the operating system, that runs in a terminal. One way of thinking about it is a shell is like a window into the operating system, and each shell is built a slightly different way, so that different parts of the operating system are accessible to you from each shell, and they each show things from a slightly different angle. A terminal is a window that offers text-based interaction with a computer. Before the advent of the GUI, terminals were the only way of interacting with computers, but they are still used today when more control is desired over your computer than a GUI is able to provide. While this may not make all that much sense right now, you'll see how you can do the same things you would do with the GUI in the terminal in less time, and you can do all sorts of things that you can't really do with the GUI.
+
+Bash, by the way, is the most popular shell right now, but there are people who prefer others (like zsh or tcsh). Each shell comes with its own set of commands and syntax, and some shells allow you to use various programming languages as part of regular actions, as opposed to just in scripts, or programs that are run.
+
+So you have a terminal open, running the bash shell, and you are located in your home directory. To actually do something you have to learn some commands. The two most important commands at the beginning are going to be 'cd' and 'ls'. 'cd' stands for "change directory" and is used to move around the filesystem. 'ls' is short for "list" and it lists the contents of directories, with the ability to specify more or less information in the listing. Both of these commands can be used with or without any arguments (words following the command that further specify what the command does), though 'cd' does nothing without any arguments. try it now: type 'cd' in after the dollar sign on the first line (where a blinking cursor should already be), and press enter on your keyboard. The same line should now be printed again and the cursor should move down to the end of that line. What happened? You told the terminal to change the directory you were in, but didn't specify a new directory, so it just left you in the current directory, and then printed the next line, meant to indicate the current state of the terminal, and since nothing changed since the command was executed, the state is unchanged, and the same line is printed.
+
+Now try 'ls' without any arguments.  A list of directories and maybe some files should appear below the line, and then the same status line should  be printed again. If this were all that these commands could do, they would pretty useless, but with both you can add directories as arguments and the commands will apply their functionality to the specified directories. So try typing in 'ls /' and you will receive a listing of the directories contained in the root. Type in 'ls .' and you will receive a listing of the directories contained in this directory, or the same as typing 'ls' with no arguments. To specify other directories, you provide a path to them.  A path is just a string that shows the command-line where something is located, either relative to the current working directory, or absolutely. (By the way, I forgot to mention this, but if you ever are unsure what the current working directory is, use the command 'pwd', which is short for "print working directory" to see the working directory.) Here are some example paths with explanations of how to understand them (It's not that hard to get the hang of this quickly):
+
+<code>/usr/local/</code>
+
+This says "start at the root directory", because of the opening forward slash, and "then go to the directory called 'usr' inside of that, and then go to the directory called 'local' inside of that".
+In general forward slashes are used to separate directories, though an opening forward slash always means the root directory.
+
+<code>/usr/local/../bin/</code>
+
+This says "start at the root, and go to 'usr', and then go to 'local' inside that, and then go back to the parent of the current directory, which is 'usr', so go back to 'local'. Finally, go the 'bin' directory from 'usr'". Paths can get very complicated and they can go up or down an arbitrary number of directories, but in practice, you probably won't be dealing often with anything that complicated. 
+
+<code>~/Documents</code>
+
+This says "start at my home directory, and then go to 'Documents' inside of that". Note that I chose not to include a trailing slash in this case. It doesn't matter for these purposes whether or not you include one. 
+
+<code>Documents/works_in_progress</code> 
+
+The previous paths have all been absolute, since they specified the starting location, and so if you were to run 'cd' with any working directory and any of those paths, the results would be the same. This one on the other hand, because it doesn't start with an absolute location, it is assumed to be describing a location relative to the current working directory. So if I was in "~", then this would be the same as:
+<code>~/Documents/works_in_progress</code>. However, if I were in '/usr/', then this would be <code>/usr/Documents/works_in_progress</code>. Be careful when specifying paths to be clear whether or not you are using a relative path or an absolute path. 
+
+Finally: <code>../usr/</code> 
+
+This says to go up to the parent of the current directory, and then from there go down to 'usr'. If I were in '/bin/', I would end up in '/usr/'. 
+
+This is about all there is to know about how to get around the shell, and remember to use 'pwd' and 'ls' to help figure out a) where you are, and b) where you can go from there, respectively. 
+
+So why is this important?  Because the GUIs that you will see if you use Eclipse or Netbeans are just wrappers around information that is all available from the command-line. So if anything isn't working there, you want to be able to go to the command-line and see exactly what it is that these programs are seeing. Furthermore, if you are installing a new language or debugger or something, to do it correctly, you are going to want to handle it from the command line. 
+
+This is about as much as I want to cover the command-line, but if anyone requests anything in particular, I will try my best to oblige. 
+
+For further information on the command-line, here are some resources you should check out:
+
+<ul>
+	<li><a href="http://linuxcommand.org/index.php" title="LinuxCommand - a guide to using the shell" target="_blank">LinuxCommand.org</a></li>
+	<li>I've found this book to be a nice reference to carry around: <a href="http://oreilly.com/catalog/9780596006280" title="O'Reilly's Linux Pocket Guide" target="_blank">Linux Pocket Guide</a></li>
+	<li>Any questions particular to Bash can be answered here: <a href="http://www.gnu.org/software/bash/manual/bashref.html#Top" title="Bash Reference Manual" target="_blank">Bash Reference Manual</a></li>
+</ul>
+
+Last tips: Any system that is built on Unix (which Mac OS X is) comes with documentation that can be reached from the command-line with the command 'man'. It is a little tricky to figure out how to navigate the man pages at first, so you might want to try entering 'man man', which gets you the page of the manual that describes the manual a little bit. Once inside the man pages, you can quit by pressing 'q' and scroll down with the spacebar. The man pages are displayed with the command 'less' by default, and it has its own set of controls, which can be found by pressing 'h' at any time when it is running.
+
+An alternative way to get information, is the well-named 'info' command which opens up an interactive info reader program, from which you can learn about pretty much anything you need. Instructions are available at the top to get started.
+
+TO BE CONTINUED...
+---

@@ -1,0 +1,21 @@
+Title: Computer Programming is Weird
+Status: Publish
+DateGMT: 2011-03-02 01:35:57
+PostName: computer-programming-is-weird
+---
+Computer programming is weird. I've been thinking about this for a while now, and I've been thinking that there is something fundamentally wrong with my understanding of computers and of coding, and that some kind of paradigm shift is needed for computing to be as powerful as it should be. Because computers are really really impressive beasts, but it seems like inevitably we fail to use them in a way that really uses them to their full potential. That may just be the idealist in me squirming at the messiness of daily life, but I can't help but feel that programming is in some weird transitional period where the only thing that is clear is that the world is changing in fundamental ways and that nothing is gonna be the same ever again. 
+
+The weird thing is that this is a discipline in which we are working backwards. Turing proved that there is a certain type of computation that can be done, and that this computation can be done by any machine, so long as it can act conditionally and utilize memory addresses. All machines that can do that are in a general sense equivalent. All computable things can be done on any computer.  When you execute a program written in C, the program is a binary executable that actually works at that level. So programming languages are just human-made structure imposed on the infinite space of possible computations. Assembly language is the first layer of structure that is imposed upon the raw computer, and then other languages are built from assembly languages, and then other languages are built from lower-level languages, and we keep piling on structure until we have something that human beings can deal with. 
+
+What's so weird about this is we start off with as much power in the sense of direct control as we could ever possibly have, and then we pull back a step, building a wall to keep us away from internals of the machine. We put some windows in the wall, and we can control the computer through those, but then we decide that we are still too close, and we build another wall with even fewer holes. And we keep going, all the while getting further away from the computer and limiting the possibility space. By the end if we want to reach the computer in the center we have to travel a precarious and idiosyncratic route, and the fundamental nature of the underlying computation is gibberish to us.
+
+And we choose to do this, and every year we build more and more walls.
+
+Why do we do this? 
+
+I'll talk more about this in my next post, but I have to study for a math midterm.
+
+TO BE CONTINUED...
+
+(I'll be back soon)
+---

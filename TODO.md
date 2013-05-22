@@ -13,7 +13,7 @@ TODO
 9. Think about how to handle simulations with many different possible configurations. 
 + Want to be able to handle many different configurations
 + Don't want to idly eat up processor time
-+ Need to acommadate a potentially unbounded number of elements.
++ Need to accommodate a potentially unbounded number of elements.
 
 
 This is OUT-OF-DATE. 

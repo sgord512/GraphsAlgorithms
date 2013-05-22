@@ -93,14 +93,22 @@ define(['deps/under',
           elem.value.replace( /\r?\n/g, "\r\n" )
 
       $("#sketchpad").replaceWith("<div id=\"tm\"></div>")
-      $("#tm").append("<div id=\"simulator\"></div>", "<div id=\"rules-visualized\"></div>", "<div id=\"rules-text\"></div>")
+      $("#tm").append("<div id=\"simulator\"></div>", "<div id=\"rules-visualized\"></div>", "<div id=\"editor\"></div>")
       $("#tm > #rules-visualized").css("float", 'left')
-      $("#tm > #rules-text").css("float", 'left')
-      $("#tm > #rules-text").append("<textarea id=\"start-state-and-tape\"></textarea>")
-      $("#tm > #rules-text").append("<textarea id=\"rule_spec\"></textarea>")
+      $("#tm > #editor").css("float", 'left')
+      $("#tm > #editor").append("<textarea id=\"input\"></textarea>")
+      $("#tm > #editor").append("<button type=\"button\">Run</button>")
+      $("#tm > #editor").append("<textarea id=\"rule-spec\"></textarea>")
 
-      $("#tm > #rules-text > #start-state-and-tape").val(tm_helper.starting_tm_input_string)
-      $("#tm > #rules-text > #start-state-and-tape").css(
+      $("#tm > #editor > button").css(
+        "font-size": "2em"
+        "float": "right"
+        "outline": "none"
+        "margin": "1px"
+      )
+
+      $("#tm > #editor > #input").val(tm_helper.starting_tm_input_string)
+      $("#tm > #editor > #input").css(
         "margin": "1px"
         "font-size": "2em"
         "resize": "none"
@@ -108,8 +116,8 @@ define(['deps/under',
         "float": "left"
       )
 
-      $("#tm > #rules-text > #rule_spec").val(tm_helper.starting_tm_program_string)
-      $("#tm > #rules-text > #rule_spec").css(
+      $("#tm > #editor > #rule-spec").val(tm_helper.starting_tm_program_string)
+      $("#tm > #editor > #rule-spec").css(
         "margin": "1px"
         "font-size": "2em"
         "resize": "none"
@@ -246,10 +254,14 @@ define(['deps/under',
         rule_vis_width = $("#tm > #rules-visualized > svg").width()
         rule_vis_height = $("#tm > #rules-visualized > svg").height()    
         text_width = sim_width - rule_vis_width - 12
-        start_state_tape_height = $("#tm > #rules-text > #start-state-and-tape").height()
-        $("#tm > #rules-text").width(text_width + 12)
-        $("#tm > #rules-text > textarea").width(text_width)
-        $("#tm > #rules-text > #rule_spec").height(rule_vis_height - start_state_tape_height - 14)
+        editor = $("#tm > #editor")        
+        button_width = $("button", editor).width()
+        input_height = $("#input", editor).height()
+        editor.width(text_width + 12)
+        $("#input", editor).width(text_width - button_width - 14)
+        $("button", editor).height(input_height)
+        $("#rule-spec", editor).width(text_width)
+        $("#rule-spec", editor).height(rule_vis_height - input_height - 14)
 
       # main function for displaying a tape
       draw_tape = (tape, noTransition) ->
@@ -320,9 +332,29 @@ define(['deps/under',
       tm = tm_helper.tm
       initialize_head(tm.state)
       draw_turing_machine(tm,true)
+
       stepper = () ->
         if not tm.halted()
           tm.step()
-          draw_turing_machine(tm)
-      setInterval(stepper, step)
+          draw_turing_machine(tm, true)
+
+      stepLoop = setInterval(stepper, step)
+
+      $("#tm > #editor > button").click(() ->
+        clearInterval(stepLoop)
+        editor = $("#tm > #editor")
+        tm_input = $("#input", editor).val()
+        tm_program = $("#rule-spec", editor).val()
+
+        final_tm_input = parser.parseInput(tm_input)
+        final_tm = new TM.TuringMachine(builder.builder(parser.parseTM(tm_program)))
+        final_tm.initialize(final_tm_input.state, final_tm_input.tape)
+
+        tm = final_tm
+
+        draw_turing_machine(tm,true)
+
+        stepLoop = setInterval(stepper, step)
+      )
+      
 )

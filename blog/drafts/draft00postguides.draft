@@ -1,0 +1,16 @@
+Title: How to get Started Programming on Max OS X, Part 3
+Status: Draft
+PostName: draft00postguides
+---
+Okay, I have confession to make: I wasn't exactly sure what I wanted to cover today, and I am going to probably just talk about a handful of disparate topics that I think might be helpful. Again, if you would like info on anything that I fail to cover here, just let me know, and I'd be happy to oblige as best I can.
+
+Anyway, let's get started. So last time I finished up introducing the command-line and I tried to motivate it a bit, but I didn't have any concrete examples so I don't know how much of a sense you've gotten of how it's used in a day-to-day workflow. To remedy that, I'm going to give myself some tasks I want to accomplish, and I'll show you the process I use to get that done. 
+
+Task 1: Set up Haskell on my computer so that I can play around with it, see how I like it.
+
+If I didn't know any better, I would probably start by googling Haskell, and seeing what info was provided on the official language website. But I, and now you, know better, and we're going to do something entirely different. The reason that I don't recommend this approach to most people is that to achieve full integration of the language with your environment is a little tricky and requires some knowledge of the way that the shell works that is extraneous to the end goal of being able to program in Haskell. 
+
+What we're going to do instead of going to the Haskell website is use a really useful piece of free open-source software called Homebrew. Homebrew is a package manager, which is a utility program that provides a set of standardized routines that can be used to manage other software on a computer. The concept of a package manager originates on Linux systems, though it is a pretty universal idea. You have a computer. You want to install a calendar application. There are immediately a bunch of questions that you have to answer to get that done. Where do you install the application? Do I need to have anything else installed for it to work properly? How do I know that this program isn't already installed on this computer, and that I just haven't seen it? What do I download to get this working right? Where do I find it? 
+
+While none of these questions are individually that difficult to answer,
+---

@@ -4,7 +4,7 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
 
     var generator = utilities.id_generator();
 
-    Vertex = function(index, name) { 
+    Vertex = function(index, name) {
         this.index = index;
         this.name = name;
     };
@@ -27,7 +27,7 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
     Graph.prototype.adjacency_matrix = function() {
 
         if(this.matrix === undefined) {
-            
+
             var matrix = [];
 
             for(var i = 0; i < this.vertices.length; i++) {
@@ -41,12 +41,12 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
             for(var x = 0; x < this.edges.length; x++) {
                 var e = this.edges[x];
                 matrix[e.u][e.v] = 1;
-             
+
             }
 
             this.matrix = matrix;
             return matrix;
-        } else { 
+        } else {
             return this.matrix;
         }
 
@@ -57,16 +57,16 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
 
     Graph.prototype.edges_directed_from = function(vertex) {
         return _.filter(this.edges, function(e) { return e.u === vertex.index; });
-    }
+    };
 
     Graph.prototype.edges_directed_to = function(vertex) {
         return _.filter(this.edges, function(e) { return e.v === vertex.index; });
-    }
+    };
 
     Graph.prototype.out_edges = Graph.prototype.edges_directed_from;
     Graph.prototype.in_edges = Graph.prototype.edges_directed_to;
-                                           
-    Graph.prototype.adjacent_vertices = function(vertex) { 
+
+    Graph.prototype.adjacent_vertices = function(vertex) {
         var connecting_edges = this.edges_directed_from(vertex);
         var self = this;
         return _.map(_.pluck(connecting_edges, 'v'), function(index) { return self.get_vertex(index); });

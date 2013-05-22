@@ -1,0 +1,29 @@
+{% extends "base.template" %}
+{% block title %}
+<title>{{ page.title }}</title>
+{% endblock %}
+{% block head %}
+  {{ super() }}
+<script type="text/javascript" src="js/deps/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="js/deps/require-2.1.2.js"></script>
+<script type="text/javascript">
+
+
+require.config({ baseUrl: "js",
+                 paths: { 'coffee-script' : 'deps/coffee-script',
+                          'cs' : 'cs'
+                        }
+});
+</script>
+<script type="text/javascript">
+
+require(['{{ 'cs!' if page.coffee }}{{ page.path }}'], 
+  function({{ page.destination }}) { 
+    $(document).ready({{ page.destination }}); 
+});
+
+</script>
+{% endblock %}
+{% block body %}
+<div id="sketchpad"></div>
+{% endblock %}

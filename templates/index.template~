@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html> <head>
+{% block head %}
+{% block title %}
+<title>Spencer Gordon's Homepage</title>
+{% endblock %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='base.css' }}"/>
+{% endblock %}
+</head>
+<body>
+<ul>
+{% for page in pages %}
+<li><a href="/{{page.destination}}">{{page.name}}</a>: {{page.description}}</li>
+{% endfor %}  
+</ul>
+<p> Hey, this is the homepage of Spencer Gordon. I am a junior at
+Brown University, concentrating in Computer Science and Philosophy. I
+am from Los Angeles, CA. I'm interested in music and the arts, and in
+my spare time I like to write, particularly creative-nonfiction.
+
+This site, which I plan to eventually turn into a personal site, right
+now is home to a couple different visualizations of different
+algorithms. I find it really helpful when thinking about algorithms to
+be able to see exactly what's happening, and I created this site to
+help me do that. The source for the site is available at <a
+href="https://github.com/sgord512/GraphsAlgorithms">github</a>.
+
+To get in touch with me, email me at <em> spencer gordon at brown dot
+edu</em>, or at <em> sgord512 at gmail dot com </em> </p>
+<div id="sketchpad"></div>
+{% block footer %}
+<address>69 Brown St., Box #3850, Brown University, Providence, RI
+02912 <br>
+spencer gordon at brown dot edu</address>
+{% endblock %}
+</body> </html>

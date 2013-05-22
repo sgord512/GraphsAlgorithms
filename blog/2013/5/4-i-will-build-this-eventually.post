@@ -1,0 +1,19 @@
+Title: I will build this eventually
+Status: Publish
+DateGMT: 2013-05-04 18:49:07
+PostName: i-will-build-this-eventually
+---
+I want to make a piece of software that can visualize graphs really easily. So I input a graph as a list of vertices and edges, and the software does its stuff and I can see that graph right in front of me.
+
+And now I want to play around with that graph. So I want to add edges, one at a time. I type in a pair of coordinates, and that edge pops in to existence. I want to compute the neighbors of a vertex. Done!
+
+I want to simulate a random walk. I say "add walker at vertex 12". The node is colored to reflect that. I now say "walk 5 steps", and the guy moves step by step, randomly to a new vertex.
+
+For a class I'm taking this semester on Probablility and Computing, and for Algorithms classes I've taken in past semesters, I've thought it would be incredibly helpful to see these kinds behaviors on graphs, because previously I've had to draw things out by hand step by step, which gets incredibly tedious when I have more than like 10 nodes to draw.
+
+This sounds like a really fun project. Another cool project. A text editor with macros enabled so that you can type "\not" and have that replaced with "¬" or I could say "\exists" and have that replaced with "∃". And then when I started to backspace onto that character, it would be replaced with the original text so that instead of deleting the entire symbol the first backspace would leave me with "\exist". This way I could dynamically adjust the symbolic shortcuts as desired. I also would want the program to save files in full expanded form, and only display them with symbols, so that they could be easily carried over to other platforms without any weird encoding issues.
+
+There are things out there that accomplish parts of this, but nothing has yet been sufficient to satisfy my imagination.
+
+<span style="color:#444444;line-height:1.7;">-Spencer</span>
+---

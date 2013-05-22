@@ -1,0 +1,17 @@
+Title: Shoot Out the Lights
+Status: Publish
+DateGMT: 2011-06-14 02:49:48
+PostName: shoot-out-the-lights
+---
+I was struck recently by the fact that computers are at their heart, nothing more than a whole bunch of rapidly flipping switches. You think about them like absurdly stupid little switches but into a box, and pumped full of electricity, and you suddenly are surprised that they can do anything at all. 
+
+At the bottom of it all, you have nothing to work with but stupid little on-and-offs. That's all. And you have to figure out how to make those little bits represent text, windows, 3d worlds, numbers, people, places, colors, motion, ideas. No wonder trying to do anything on a computer sometimes seems like trying to build a fully-functional car out of the contents of your fridge on an average day. The fact that we are able to represent some concepts, like lists, and functions, and stuff like that seems like a miracle, given the brain-dead materials we are working with. 
+
+What should a programming language be like ideally? Well, the only thing I can say with any certainty is that it should strive to eliminate incidental complexity, so that the programmer doesn't have to think about anything other than the problem they are trying to solve. Does any language do that now? No, though maybe Haskell gets close sometimes, and Scala is very concerned about that, though in an entirely different way. I'm sure that there are others I would be impressed by, but those are the two that come to mind right now. 
+
+How did we decide that Windowing systems were a good idea? Why do we use a mouse, and keyboard, two devices which are utterly incapable of providing feedback directly? Why is the desktop the primary metaphor for consumer computing? Because I think it is incredibly misleading, and it serves to distract from the real beating heart of computing, which is coding. I recognize the audacity of that statement, and I don't intend to justify it fully, but I think that the whole computational perspective that is afforded by learning to program is invaluable, and that without it, you are ill-equipped to make the most of your world. The number of opportunities for understanding and doing that you are foregoing if you can't program is beyond comprehension to me. 
+
+Listen to: <em>Shoot Out the Lights</em> by Richard and Linda Thompson. It is wonderful. My favorites are "Don't Renege On Our Love", "Man in Need", "Just the Motion", and "Shoot Out the Lights". Listen to <em>Sea Change</em> by Beck. It will not do anything for you at first, but give it a chance, and it will become incredibly affecting. 
+
+Whatever, I'm tired now, and I'm going to sleep soon, and I'm done for now.
+---

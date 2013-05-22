@@ -1,0 +1,37 @@
+Title: It's been a while
+Status: Publish
+DateGMT: 2012-02-24 04:28:05
+PostName: its-been-a-while
+---
+Hey,
+
+It's been a while since my last post, and I'm a little annoyed at how infrequently I've been posting recently. I would like to be writing more, and this blog is about the only context in which I write write these days (excluding programming) and so I'd like to keep it up to date if only to exercise my writing muscle, which has been withering away.
+
+That being said, the topic for right now is programming language design:
+
+Basically, I love functional programming, and my favorite all-around language is Haskell. I recently have been working on a project that will take graphs and animate various algorithms on them. I initially wrote this in Haskell, but then I decided that I'd like to have something that is more easily accessible, that can be accessed by anyone, and so I rewrote it in Javascript, which was quite an educational experience.
+
+Comparing the experience of writing the same program functionally and imperatively, I can see very clearly places where one functional programming gets really really awkward, and I can see places where the imperative version becomes very error-prone, in contrast to the almost inevitable correctness of the functional version. That's all very diplomatic, and of no help to the vehement language partisans that haunt the internet, looking for incendiary blog posts upon which to unleash their vitriol and fervor.
+
+Javascript vs. Haskell with respect to Stateful Data Structures:
+
+Basically, you can't directly mutate anything in Haskell. You can get around this by using a State Monad, but it's hard and annoying, and I would much rather just be able to manipulate state directly.
+
+So here is my idea for a programming language: By default, everything is imperative, with mutable state and all that jazz. But you can designate certain regions as purely functional, and define all sorts of functions in those regions that could then be used in the rest of the program.
+
+The functional parts of the program would have to be secondary to the imperative ones for the simple reason that the very act of running a program requires IO and state, and is intrinsically side-effect having.
+
+The functional parts of the program would allow you to demarcate functions that are guaranteed to be free of side effects, and which you can reason about assuming referential transparency.
+
+Ideally then, you would do all IO and storage and retrieval of state in the imperative sections, and use the functional sections for the heavy-duty data transformations in which 95% of bugs would eventually be located.
+
+I like the idea, but I haven't fully thought it through at all, and so there may be some obvious flaws.
+
+Anyway, if you have any comments, feel free to comment, as that is what the comments sections here is for.
+
+Goodnight, and sleep tight, cruel world,
+
+-Spencer
+
+(Blogging officially resumed!!! Yay!!!)
+---

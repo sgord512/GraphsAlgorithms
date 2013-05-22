@@ -1,0 +1,17 @@
+Title: AAAAAAAAHHHHHHHHHHHH!!!!!!!! (in a good way)
+Status: Publish
+DateGMT: 2011-04-26 00:55:51
+PostName: aaaaaaaahhhhhhhhhhhh-in-a-good-way
+---
+Okay, so one of the many reasons that my posts have been infrequent recently is that I have been spending all of my free time on computer science. In particular, this one assignment, which I could not, despite my best efforts, get to work. As of now, I have probably spent over 20 hours debugging it, and in the process taught myself emacs, gdb, grep, input redirection, and others. This is literally the most frustrating thing I have ever done. 
+
+About 5 minutes ago, I figured it out. I found the bug. (Caveat: I haven't yet fixed it in the code, because I wanted to write this post first, and so there is a slight possibility it still won't work after I make the changes I am envisioning. But I am like 99% sure. Also, I will feel really stupid if it doesn't work now.) I found it. 
+
+I feel like a superhero right now. Honestly, the sense of accomplishment that I am feeling right now is greater than I can remember ever feeling. I'm serious. 
+
+Normally, when I have some bug that frustrates me to no end, it turns out to be something really stupid causing the problem, but in this case, the bug is actually really tricky, and comes about in such a weird way, that it is essentially impossible to determine what's causing it without knowing what the problem is in advance. 
+
+Unfortunately, the elation is wearing off, and I am realizing that I still have to actually fix this. So that's the end of the post for now.
+
+-Simon Says
+---

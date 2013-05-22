@@ -1,0 +1,43 @@
+Title: PAGEFAULT, HA HA HA HA HA 0xbbbbbbbb.
+Status: Publish
+DateGMT: 2013-05-14 07:02:11
+PostName: pagefault-ha-ha-ha-ha-ha-0xbbbbbbbb
+---
+I've been trying to figure out why this test I've been running for the past two hours keeps failing right at the end. I stepped through it like an hour and a half ago, and that was unhelpful. It also made me think that the problem I was having was with an improperly deallocated VM area, or that somehow the combination of removing the VM area from my VM map's list of VM areas while simultaneously relinquishing it to the slab deallocator was causing the stupid list iteration macro to pagefault. (VM stands for <a href="http://en.wikipedia.org/wiki/Virtual_memory">virtual memory</a>, which we are implementing in a fashion similar to the implementation on Linux or other Unixes) I'm not so sure that's the case anymore. Maybe it's somewhere else. I can't even figure out which is the problematic line.
+
+When stepping through the code by hand I thought my linked list looked suspicious, and was totally convinced that there was something going on there, and I proceeded to draw out the entire linked list by hand (with hex memory addresses and everything). Turns out it was fine. I did find the reason that it looked suspicious though. Before I explain, let's see if you can figure it out! Below are snippets from my gdb sessions, the first is what I thought I was seeing, the second is what I actually was seeing. Have fun!
+
+What I thought I read:
+<pre>
+(gdb) p map-&gt;vmm_list-&gt;l_next-&gt;l_next-&gt;l_next
+$21 = (struct list *) 0xc1e6e548
+(gdb) p *map-&gt;vmm_list-&gt;l_next-&gt;l_next-&gt;l_next
+{ l_next: 0xc1e6e548, l_prev: 0xc1e6e50c }
+</pre>
+
+What I actually read: 
+<pre>
+(gdb) p map-&gt;vmm_list-&gt;l_next-&gt;l_next-&gt;l_next
+$21 = (struct list *) 0xc1e6e548
+(gdb) p *map-&gt;vmm_list-&gt;l_next-&gt;l_next-&gt;l_next
+{ l_next: 0xc1e6e584, l_prev: 0xc1e6e50c }
+</pre>
+
+I'll ramble on for a little bit before revealing the answer, so that you don't cheat. So my Operating System is otherwise almost done. How would I describe it? Quirky, flawed. A lot of heart. Not production-ready. 
+
+In other news, my sister is in town for a couple of days. It's really really nice, and I'm having a lot of fun, even though finals are making it very hard for me to spend much time with her. Also, I have stupidly let my sleep schedule slip later and later, and so I'm wide awake at 2:53am. I'm gonna try to go to sleep in like 10 minutes though, and hopefully I can keep it up, and be back on track by Thursday. 
+
+Ok, here are the answers:
+
+Turns out that
+<pre>0xc1e6e584</pre>
+and
+<pre>0xc1e6e548</pre>
+are almost indistinguishable after an hour of squinting at your screen. 
+
+Isn't that fascinating? I still haven't figured out the problem. I'll let you know when (or if) I do figure it out. 
+
+Goodnight everyone.
+
+-Spencer
+---
