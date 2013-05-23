@@ -8,7 +8,7 @@
 </head>
 <body>
 {% block nav %}
-<header><a href="/" rel="author">Spencer Gordon</a></header>
+<header><a href="/" rel="author">Spencer Gordon</a> | <a href="/blog">Blog</a></header>
 {% endblock %}
 {% block body %}
 <div id="text">

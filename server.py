@@ -62,7 +62,7 @@ for year in post_dirs:
             post_list.append(post_dict)
             post_map[year][month].append(post_dict)
 
-post_list.sort(key=lambda post: post["link"])
+post_list.sort(key=lambda post: post["link"], reverse=True)
 
 # These routes are used for everything but the index
 @app.route("/js/<path:module>")

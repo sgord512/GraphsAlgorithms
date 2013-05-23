@@ -1,0 +1,10 @@
+#!/Users/spencergordon/Documents/experiments/js/graphs/venv/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'gunicorn==0.17.4','console_scripts','gunicorn'
+__requires__ = 'gunicorn==0.17.4'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('gunicorn==0.17.4', 'console_scripts', 'gunicorn')()
+    )
