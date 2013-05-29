@@ -10,17 +10,24 @@ define(['deps/under', 'deps/d3'], function(underscore, d3) {
                 .attr("width", w)
                 .attr("shape-rendering", 'geometricPrecision');
         },
-        transforms: { 
+
+        dimensions: {
+            x: function() { return window.innerWidth; },
+            y: function() { return window.innerHeight; }
+        },
+
+        transforms: {
             translation: function(x, y) {
                 return "translate(" + x + "," + y + ") ";
             }
         },
+
         polygon: function(points) {
             return _.map(points, function(point) {
                 return (new String(point.x)).concat(",").concat(new String(point.y));
             }).join(" ");
-        }         
+        }
 
-    }
+    };
 
 });

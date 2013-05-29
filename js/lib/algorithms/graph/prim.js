@@ -4,35 +4,44 @@ define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore,
     var Prim = {};
 
     Graph.prototype.algorithms.prim = Prim;
-    
-    Prim.initialize = function(graph) { 
+
+    Prim.initialize = function(graph) {
         var p = {};
-        
+
         p.display_name = "Prim's Algorithm";
 
         graph.addToMST(graph.vertices[Math.floor(Math.random() * graph.num_vertices)]);
-                
+
+        p.last_vertex_added = null;
+        p.last_edge_added = null;
+
         p.find_next_edge = function() {
             var next_edge, added_point;
             var current_index = 0;
             var edge_found = false;
-            if(graph.vertices_in_tree.length == graph.num_vertices) return false ;
+            if(graph.vertices_in_tree.length === graph.num_vertices) {
+                graph.clearLastAdded();
+                return false;
+            }
             while(current_index < graph.sorted_edge_list.length) {
                 next_edge = graph.sorted_edge_list[current_index];
                 if (p.valid_edge(next_edge)) {
                     graph.addToMST(next_edge);
+                    graph.last_edge_added = next_edge;
+                    next_edge.last_added = true;
                     graph.sorted_edge_list[current_index] = undefined;
                     graph.sorted_edge_list = _.compact(graph.sorted_edge_list);
                     edge_found = true;
                     break;
                 }
-                else { 
+                else {
                     current_index += 1;
                 }
             }
 
-            if(!edge_found) { 
-                console.log("out of luck"); return false;
+            if(!edge_found) {
+                console.log("no edge found");
+                return false;
             }
             if(p.incident_to_start(next_edge)) {
                 added_point = next_edge.end_point();
@@ -42,23 +51,22 @@ define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore,
             else console.log("This shouldn't happen");
 
             graph.addToMST(added_point);
-
             return true;
-        }
+        };
 
         p.valid_edge = function(e) {
             var contains_start = p.incident_to_start(e);
             var contains_end = p.incident_to_end(e);
             return (contains_start && !contains_end) || (!contains_start && contains_end);
-        }
+        };
 
         p.incident_to_start = function(e) {
             return _.include(graph.vertices_in_tree, e.start_point());
-        }
+        };
 
         p.incident_to_end = function(e) {
             return _.include(graph.vertices_in_tree, e.end_point());
-        }
+        };
 
         return p;
     };

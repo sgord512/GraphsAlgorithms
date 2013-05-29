@@ -7,45 +7,45 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
         this.value = v;
         this.right = undefined;
         this.parent = parent;
-    }
+    };
 
-    Node.prototype.height = function() { 
+    Node.prototype.height = function() {
         if(this.left && this.right) { return Math.max(this.left.height(), this.right.height()) + 1; }
         else if(this.left) { return this.left.height() + 1; }
         else if(this.right) { return this.right.height() + 1; }
         else return 1;
-    }
+    };
 
-    Node.prototype.is_root = function() { 
+    Node.prototype.is_root = function() {
         return this.parent === undefined;
-    }
+    };
 
     Node.prototype.is_left_child = function() {
         return this.parent.left === this;
-    }
-    
+    };
+
     Node.prototype.is_right_child = function() {
         return this.parent.right === this;
-    }
+    };
 
     Node.prototype.is_leaf = function() {
         return !(this.right || this.left);
-    }
+    };
 
     Node.prototype.remove_child = function(node) {
         if(this.left === node) { this.left = undefined; }
         else if(this.right === node) { this.right = undefined; }
-    }
+    };
 
     var SplayTree = function(comparator) {
         this.comparator = comparator || function(a, b) { return a - b; };
         this.root = undefined;
-    }
+    };
 
-    SplayTree.prototype.height = function() { 
+    SplayTree.prototype.height = function() {
         if(this.root) { return this.root.height(); }
-        else return 0; 
-    }
+        else return 0;
+    };
 
     SplayTree.prototype.rotate_right = function(node) {
         var p = node.parent;
@@ -55,8 +55,8 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
         p.parent = node;
         p.left = node_right;
         node.parent = g;
-        if(g) { 
-            if(g.left === p) { 
+        if(g) {
+            if(g.left === p) {
                 g.left = node;
             } else if(g.right === p) {
                 g.right = node;
@@ -64,7 +64,7 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
         } else {
             this.root = node;
         }
-    }
+    };
 
     SplayTree.prototype.rotate_left = function(node) {
         var p = node.parent;
@@ -74,16 +74,16 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
         p.parent = node;
         p.right = node_left;
         node.parent = g;
-        if(g) { 
-            if(g.left === p) { 
+        if(g) {
+            if(g.left === p) {
                 g.left = node;
             } else if(g.right === p) {
                 g.right = node;
             }
-        } else { 
+        } else {
             this.root = node;
         }
-    }
+    };
 
     SplayTree.prototype.splay_to_root = function(node) {
         if(node) {
@@ -91,7 +91,7 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
                 this.splay(node);
             }
         }
-    }
+    };
 
     SplayTree.prototype.splay = function(node) {
         var p = node.parent;
@@ -114,11 +114,11 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
             this.rotate_right(node);
             this.rotate_left(node);
         }
-    }
-        
+    };
+
     SplayTree.prototype.insert = function(v) {
-        if(!this.root) { 
-            this.root = new Node(v); 
+        if(!this.root) {
+            this.root = new Node(v);
         } else {
             var curr_node = this.root;
             var p;
@@ -139,7 +139,7 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
             this.splay_to_root(the_node);
         }
         return this;
-    }
+    };
 
     SplayTree.prototype.swap_with_predecessor = function(node) {
         var other = node.left;
@@ -150,35 +150,35 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
         node.value = other.value;
         other.value = temp_value;
         return other;
-    }
-        
+    };
+
     SplayTree.prototype.swap_with_successor = function(node) {
         var other = node.right;
-        while(other.left) { 
+        while(other.left) {
             other = other.left;
         }
         var temp_value = node.value;
         node.value = other.value;
         other.value = temp_value;
-        return other; 
-    }
+        return other;
+    };
 
     SplayTree.prototype.remove = function(v) {
         var node = this.root;
         var other;
-        while(node && this.comparator(v, node.value) !== 0) { 
+        while(node && this.comparator(v, node.value) !== 0) {
             if(this.comparator(v, node.value) > 0) {
                 node = node.right;
             } else if(this.comparator(v, node.value) < 0) {
                 node = node.left;
             }
         }
-                
+
         if(node) {
-            if(node.is_leaf()) { 
+            if(node.is_leaf()) {
                 if(node.is_root()) { this.root = undefined; }
                 else { node.parent.remove_child(node); }
-            } else { 
+            } else {
                 if(node.left) {
                     other = this.swap_with_predecessor(node);
                 } else {
@@ -188,9 +188,9 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
             }
             this.splay_to_root(node.parent);
         }
-        
+
         return this;
-    }
+    };
 
     SplayTree.prototype.search = function(v) {
         var curr_node = this.root;
@@ -199,14 +199,14 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
                 curr_node = curr_node.right;
             } else if(this.comparator(v, curr_node.value) < 0) {
                 curr_node = curr_node.left;
-            } else { 
-                this.splay_to_root(curr_node); 
+            } else {
+                this.splay_to_root(curr_node);
                 return curr_node;
             }
         }
         return undefined;
-    }
+    };
 
     return SplayTree;
-    
+
 });

@@ -1,0 +1,3 @@
+define(['deps/under',
+        'deps/d3',
+        'lib/utilities/d3_helper'], (underscore, d3, d3_helper) ->

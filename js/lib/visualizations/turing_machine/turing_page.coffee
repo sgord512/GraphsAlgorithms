@@ -9,8 +9,8 @@ define(['deps/under',
     _ = underscore._
     d3 = d3
 
-    h = screen.availHeight - 150
-    w = screen.availWidth - 50
+    h = d3_helper.dimensions.y() - 150
+    w = d3_helper.dimensions.x() - 50
     step = 500
     unit = 40
     spacing = 4
@@ -61,7 +61,7 @@ define(['deps/under',
       last_index = index
       
       num_ls = Math.ceil((center_square_nw_corner.x / unit) + 1) 
-      num_rs = Math.ceil(((w - (center_square_nw_corner.x + unit)) / unit) + 1)
+      num_rs = Math.ceil(((w - (center_square_nw_corner.x + unit)) / unit) + 1) 
       num_extra_ls = num_ls - left.length
       num_extra_rs = num_rs - right.length
       num_extra_rs = 0 if num_extra_rs < 0
