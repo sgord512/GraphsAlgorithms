@@ -1,6 +1,6 @@
 {% extends "base.template" %}
 {% block title %}
-<title>{{ page.title }}</title>
+{{ page.name }}
 {% endblock %}
 {% block head %}
   {{ super() }}

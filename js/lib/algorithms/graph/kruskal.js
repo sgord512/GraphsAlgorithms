@@ -1,5 +1,5 @@
 define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore, Graph) {
-    
+
 
     var _ = underscore._;
     var Kruskal = {};
@@ -11,12 +11,15 @@ define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore,
 
         k.display_name = "Kruskal's Algorithm";
 
+        k.last_vertex_added = null;
+        k.last_edge_added = null;
+
         k.forests = [];
 
         k.Forest = function(index, vertices) {
             this.index = index;
             this.vertices = vertices;
-        }
+        };
 
         k.Forest.prototype.add_vertices = function(vertices) {
             var self = this;
@@ -24,19 +27,26 @@ define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore,
                 v.forest = self.index;
             });
             this.vertices = this.vertices.concat(vertices);
-        }
-      
+        };
+
 
         _.each(graph.vertices, function(v) {
             k.forests.push(new k.Forest(v.id, [v]));
             graph.addToMST(v);
             v.forest = v.id;
         });
-        
+
+        graph.last_vertex_added.last_added = false;
+        graph.last_vertex_added = null;
+
+
         k.find_next_edge = function() {
             var next_edge;
             var edge_found = false;
-            if(k.forests.length == 1) return false;
+            if(k.forests.length == 1) {
+                graph.clearLastAdded();
+                return false;
+            }
             while(!edge_found) {
                 next_edge = graph.sorted_edge_list.shift();
                 if (k.connects_two_forests(next_edge)) {
@@ -46,7 +56,7 @@ define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore,
                 }
             }
             return true;
-        }
+        };
 
         k.merge_forests = function(index1, index2) {
             var second_forest = k.find_forest_by_index(index2);
@@ -54,7 +64,7 @@ define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore,
             first_forest.add_vertices(second_forest.vertices);
             k.forests[k.find_forest_index(index2)] = undefined;
             k.forests = _.compact(k.forests);
-        }
+        };
 
         k.find_forest_by_index = function(i) {
             var current_index = 0;
@@ -71,7 +81,8 @@ define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore,
                 }
             }
             return undefined;
-        }
+        };
+
         k.find_forest_index = function(i) {
             var current_index = 0;
             while(current_index < k.forests.length) {
@@ -87,26 +98,26 @@ define(['deps/under', 'lib/algorithms/graph/random_graph'], function(underscore,
                 }
             }
             return undefined;
-        }
+        };
 
 
-        k.connects_two_forests = function(e) { 
+        k.connects_two_forests = function(e) {
             var result = e.start_point().forest !== e.end_point().forest;
             return result;
-        }
+        };
 
         k.first_forest_index = function(e) {
             return _.min([e.start_point().forest, e.end_point().forest]);
-        }
+        };
 
         k.second_forest_index = function(e) {
             return _.max([e.start_point().forest, e.end_point().forest]);
-        }
+        };
 
         return k;
-    }
+    };
+
     return Kruskal;
 
 
 });
-      

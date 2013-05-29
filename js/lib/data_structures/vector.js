@@ -1,4 +1,4 @@
-var Vector = {}
+var Vector = {};
 
 Vector = function(/* ... */) {
     if(arguments.length === 1) {
@@ -10,10 +10,9 @@ Vector = function(/* ... */) {
             this.d = this.values.length;
         }
     } else throw new Error("incorrect number of arguments");
-}
+};
 
 Vector.create = function(dimensions, values) {
     var v = new Vector(dimensions);
     return v;
-}
-    
+};

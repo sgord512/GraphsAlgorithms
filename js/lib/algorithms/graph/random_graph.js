@@ -8,6 +8,8 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
 
     Vertex = function() {
         this.id = vertex_generator();
+        this.inMST = false;
+        this.last_added = false;
     };
 
     Vertex.prototype.toString = function() { return "id: " + this.id; };
@@ -31,6 +33,7 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
 
         this.id = edge_generator();
         this.g = g;
+        this.last_added = false;
     };
 
     Edge.prototype.toString = function() {
@@ -44,6 +47,8 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
         this.vertices = [];
         this.Edge = Edge;
         this.Vertex = Vertex;
+        this.last_edge_added = null;
+        this.last_vertex_added = null;
     };
 
     var generate_graph = function(config) {
@@ -81,12 +86,33 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
         if(o instanceof Edge) {
             this.edges_in_tree.unshift(o);
             o.inMST = true;
+            o.last_added = true;
+            if (this.last_edge_added) {
+                this.last_edge_added.last_added = false;
+            }
+            this.last_edge_added = o;
         }
         else if(o instanceof Vertex) {
             this.vertices_in_tree.unshift(o);
             o.inMST = true;
+            o.last_added = true;
+            if (this.last_vertex_added) {
+                this.last_vertex_added.last_added = false;
+            }
+            this.last_vertex_added = o;
         }
         else console.log("Tried to add something that wasn't an edge or vertex!");
+    };
+
+    Graph.prototype.clearLastAdded = function() {
+        if(this.last_edge_added) {
+            this.last_edge_added.last_added = false;
+        }
+        this.last_edge_added = null;
+        if(this.last_vertex_added) {
+             this.last_vertex_added.last_added = false;
+        }
+        this.last_vertex_added = null;
     };
 
     Graph.prototype.generateVertices = function(generator) {
@@ -114,11 +140,11 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
 
     Edge.prototype.start_point = function() {
         return this.g.vertices[this.start];
-    }
+    };
 
     Edge.prototype.end_point = function() {
         return this.g.vertices[this.end];
-    }
+    };
 
     Graph.prototype.generateEdges = function() {
         var self = this;
@@ -132,10 +158,10 @@ define(["lib/utilities", "deps/under"], function(utilities, underscore) {
             });
         });
 
-        edge_list = _.reject(edge_list, function(e) { return e.self_loop });
-        edge_list = _.sortBy(edge_list, function(e) { return self.edge_id(e) });
-        edge_list = _.uniq(edge_list, true, function(e) { return self.edge_id(e) });
-        edge_list = _.sortBy(edge_list, function(e) { return e.id });
+        edge_list = _.reject(edge_list, function(e) { return e.self_loop; });
+        edge_list = _.sortBy(edge_list, function(e) { return self.edge_id(e); });
+        edge_list = _.uniq(edge_list, true, function(e) { return self.edge_id(e); });
+        edge_list = _.sortBy(edge_list, function(e) { return e.id; });
         return edge_list;
     };
 

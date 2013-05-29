@@ -5,7 +5,7 @@ body {
 }
 
 header { 
-    margin-bottom: 2em;
+    margin-bottom: 1%;
 }
 
 #text { 
@@ -17,7 +17,7 @@ header {
 }
 
 #footer { 
-    margin-top: 2em;
+    margin-top: 1%;
 }
 
 a { 
@@ -33,9 +33,6 @@ a:not(:hover) {
 }
 
 #sketchpad { 
-}
-
-svg {
     margin: 10px;
-    border: solid 1px #ccc; 
+    /* border: solid 2px #ccc; */
 }

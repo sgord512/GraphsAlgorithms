@@ -26,28 +26,29 @@
               } 
 
     ,"dihedral": { "name": "Dihedral Group - Cayley Table and Octagons",
-               "path": "lib/visualizations/groups/dihedral_page",
-               "description": "Visualization of the dihedral group on an octagon (order 16)."
-             }
-
+                   "path": "lib/visualizations/groups/dihedral_page",
+                   "description": "Visualization of the dihedral group on an octagon (order 16)."
+                 }
     ,"quaternion": { "name": "Quaternion Group - Cayley Table",
-               "path": "lib/visualizations/groups/quaternion_page",
-               "description": "Visualization of the quaternion group."
-             }
-
+                     "path": "lib/visualizations/groups/quaternion_page",
+                     "description": "Visualization of the quaternion group."
+                   }
     ,"symmetric": { "name": "Symmetric Group - Cayley Table and Permutations",
-               "path": "lib/visualizations/groups/symmetric_page",
-               "description": "Visualization of the symmetric group on 4 elements (order 24)."
-             }
-
+                    "path": "lib/visualizations/groups/symmetric_page",
+                    "description": "Visualization of the symmetric group on 4 elements (order 24)."
+                  }
     ,"turing": { "name": "Turing Machine",
-             "path": "lib/visualizations/turing_machine/turing_page",
-             "description": "Turing Machine Simulator",
-             "coffee": true
-             }            
-
+                 "path": "lib/visualizations/turing_machine/turing_page",
+                 "description": "Turing Machine Simulator",
+                 "coffee": true
+               }            
     ,"hilbert": { "name": "Hilbert Curve",
-             "path": "lib/visualizations/hilbert_curve_page",
-             "description": "Hilbert Curve"
-             }            
+                  "path": "lib/visualizations/hilbert_curve_page",
+                  "description": "Hilbert Curve"
+                }            
+    ,"block": { "name": "Block View of S-expressions",
+                "path": "lib/visualizations/syntax_tree",
+                "description": "An experiment in viewing S-expressions as nested blocks",
+                "coffee": true
+              }
 }

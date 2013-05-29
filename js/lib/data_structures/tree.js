@@ -1,28 +1,28 @@
 define(['lib/utilities','deps/under'], function(utilities, underscore) {
 
     var _ = underscore._;
-    
+
     var Tree = {};
 
     var generator = utilities.id_generator();
 
-    Tree = function() { 
+    Tree = function() {
         this.nodes = [];
         this.leaves = [];
         this.branches = [];
         this.id = generator();
     };
 
-    Tree.isRoot = function(node) { 
+    Tree.isRoot = function(node) {
         return _.isUndefined(node.parent);
     };
 
     Tree.isLeaf = function(node) {
         return node instanceof Tree.Leaf;
-    }
+    };
 
-    Tree.prototype.onNodes = function(f) { return _.map(this.nodes, f); }
-    Tree.prototype.onLeaves = function(f) { return _.map(this.leaves, f); }
+    Tree.prototype.onNodes = function(f) { return _.map(this.nodes, f); };
+    Tree.prototype.onLeaves = function(f) { return _.map(this.leaves, f); };
 
     Tree.prototype.mergeNodes = function(left, right) {
         var n = new Tree.Node(left, right);
@@ -37,23 +37,23 @@ define(['lib/utilities','deps/under'], function(utilities, underscore) {
         return n;
     };
 
-    Tree.prototype.roots = function() { 
+    Tree.prototype.roots = function() {
         var roots = _.filter(this.nodes, Tree.isRoot);
         return _.sortBy(roots, function(n) { return 1 - n.freq; });
     };
 
-    Tree.prototype.all_nodes = function() { 
+    Tree.prototype.all_nodes = function() {
         return _.sortBy(this.nodes, function(n) { return 1 - n.freq; });
-    }
+    };
 
     Tree.prototype.nodesAtHeight = function(h) {
         var heights = _.groupBy(nodes, 'height');
         return heights.h;
-    }
-    
-    Tree.prototype.height = function() { return _.max(_.pluck(this.nodes, 'height')) };
+    };
 
-    Tree.prototype.makeLeaf = function(frequency, letter) { 
+    Tree.prototype.height = function() { return _.max(_.pluck(this.nodes, 'height')); };
+
+    Tree.prototype.makeLeaf = function(frequency, letter) {
         var l = new Tree.Leaf(frequency, letter);
         this.nodes.unshift(l);
         this.leaves.unshift(l);
@@ -80,19 +80,19 @@ define(['lib/utilities','deps/under'], function(utilities, underscore) {
         this.depth = 0;
         this.id = generator();
     };
-    
-    var root = function() { 
-        if(_.isUndefined(this.parent)) { 
+
+    var root = function() {
+        if(_.isUndefined(this.parent)) {
             return this;
-        } else { 
+        } else {
             return this.parent.root();
         }
-    }
+    };
 
     Tree.Node.prototype.root = root;
     Tree.Leaf.prototype.root = root;
 
-    var path = function() { 
+    var path = function() {
         var node = this;
         var path = [];
         while(!_.isUndefined(node.parent)) {
@@ -100,15 +100,15 @@ define(['lib/utilities','deps/under'], function(utilities, underscore) {
             node = node.parent;
         }
         return path;
-    }
+    };
 
     Tree.Node.prototype.path = path;
     Tree.Leaf.prototype.path = path;
 
-    var layer_offset = function() { 
+    var layer_offset = function() {
         var path = this.path().reverse();
         var sum = 0;
-        var encoding = _.map(path, function(side, i) { 
+        var encoding = _.map(path, function(side, i) {
             if (side === 'left') {
                 return 0;
             } else if (side === 'right') {
@@ -117,8 +117,8 @@ define(['lib/utilities','deps/under'], function(utilities, underscore) {
         });
         _.each(encoding, function(val, i) { sum = sum + val * Math.pow(2, i); });
         return sum;
-    }
-    
+    };
+
     Tree.Node.prototype.layer_offset = layer_offset;
     Tree.Leaf.prototype.layer_offset = layer_offset;
 
@@ -129,7 +129,7 @@ define(['lib/utilities','deps/under'], function(utilities, underscore) {
             this.right.update_depths();
         }
         return true;
-    }
+    };
 
     Tree.Node.prototype.update_depths = depth;
     Tree.Leaf.prototype.update_depths = depth;
@@ -137,6 +137,6 @@ define(['lib/utilities','deps/under'], function(utilities, underscore) {
     Tree.Node.prototype.toString = function() {
         return "_: " + this.freq + "%";
     };
-        
+
     return Tree;
 });
